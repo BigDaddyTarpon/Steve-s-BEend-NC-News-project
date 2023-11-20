@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const format = require("pg-format");
+
 
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics").then((topics) => {
@@ -7,9 +7,10 @@ exports.selectTopics = () => {
   });
 };
 
-exports.selectArticlesById = (article_id) =>{
-    return db.query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
+exports.selectArticlesById = (article_id) => {
+  return db
+    .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
     .then((articles) => {
-        return articles.rows[0];
-      });
-}
+      return articles;
+    });
+};

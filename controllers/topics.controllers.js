@@ -1,3 +1,4 @@
+const { handlePSQLErrors } = require("../errorhandling");
 const { selectTopics, selectArticlesById } = require("../models/topics.models");
 
 exports.getTopics = (req, res, next) => {
@@ -7,17 +8,24 @@ exports.getTopics = (req, res, next) => {
     })
 
     .catch((err) => {
-      console.log(err, "<--err catch in controller line 10");
       next(err);
     });
-
 };
 
-exports.getArticlesById = (req, res, next) =>{
-const {article_id} = req.params;
-selectArticlesById(article_id)
-.then((articles)=>{
-  res.status(200).send({articles})
-})
-
+exports.getArticlesById = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticlesById(article_id)
+    .then((articles) => {
+      if (articles.rowCount === 0) {
+        res.status(400).send({ message: "Bad Request" });
+      }
+      res.status(200).send({ articles: articles.rows[0] });
+    })
+    .catch((err) => {
+      if (err.code === "22P02") {
+        res.status(400).send({ message: "Bad Request" });
+      }
+      // if(err.code === '22P02'){handlePSQLErrors('22P02')}
+      next(err);
+    });
 };
