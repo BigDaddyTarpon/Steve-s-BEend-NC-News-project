@@ -3,6 +3,7 @@ const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
+const endPoints = require("../endpoints.json");
 
 afterAll(() => {
   return db.end();
@@ -51,6 +52,18 @@ describe("non existent endpoint", () => {
         const message = response.body.message;
 
         expect(message).toBe("Not found");
+      });
+  });
+});
+
+describe.only("/api", () => {
+  test("GET:200 returns object describing all the available endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.length).not.toBe(0);
+        expect(response.body).toEqual(endPoints);
       });
   });
 });
