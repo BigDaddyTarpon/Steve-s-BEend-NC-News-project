@@ -4,6 +4,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
 
+
 afterAll(() => {
   return db.end();
 });
@@ -54,3 +55,23 @@ describe("non existent endpoint", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id", ()=>{test("returns the article with appropriate properties", ()=>{
+  return request(app)
+  .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+
+        expect(typeof response.body.articles.article_id).toBe('number');
+        expect(typeof response.body.articles.votes).toBe('number');
+        expect(typeof response.body.articles.author).toBe('string');
+        expect(typeof response.body.articles.title).toBe('string');
+        expect(typeof response.body.articles.body).toBe('string');
+        expect(typeof response.body.articles.topic).toBe('string');
+        expect(typeof response.body.articles.created_at).toBe('string');
+        expect(typeof response.body.articles.article_img_url).toBe('string');
+
+      })
+})
+
+})

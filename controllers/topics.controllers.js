@@ -1,4 +1,4 @@
-const { selectTopics } = require("../models/topics.models");
+const { selectTopics, selectArticlesById } = require("../models/topics.models");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -7,7 +7,17 @@ exports.getTopics = (req, res, next) => {
     })
 
     .catch((err) => {
-      console.log(err, "<--err catch in control");
+      console.log(err, "<--err catch in controller line 10");
       next(err);
     });
+
+};
+
+exports.getArticlesById = (req, res, next) =>{
+const {article_id} = req.params;
+selectArticlesById(article_id)
+.then((articles)=>{
+  res.status(200).send({articles})
+})
+
 };
