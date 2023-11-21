@@ -22,10 +22,6 @@ exports.getArticlesById = (req, res, next) => {
       res.status(200).send({ articles: articles.rows[0] });
     })
     .catch((err) => {
-      if (err.code === "22P02") {
-        res.status(400).send({ message: "Bad Request" });
-      }
-      // if(err.code === '22P02'){handlePSQLErrors('22P02')}
       next(err);
     });
 };
