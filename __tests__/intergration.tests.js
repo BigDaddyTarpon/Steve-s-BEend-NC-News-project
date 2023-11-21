@@ -56,14 +56,14 @@ describe("non existent endpoint", () => {
   });
 });
 
-describe.only("/api", () => {
+describe("/api", () => {
   test("GET:200 returns object describing all the available endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
       .then((response) => {
         expect(response.body.length).not.toBe(0);
-        expect(response.body).toEqual(endPoints);
+        expect(response.body.endPoints).toEqual(endPoints);
       });
   });
 });

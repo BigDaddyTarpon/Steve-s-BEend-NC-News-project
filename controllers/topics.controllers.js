@@ -14,5 +14,5 @@ exports.getTopics = (req, res, next) => {
 };
 
 exports.getEndpoints = (req, res) => {
-  res.status(200).send(appDetails);
+  res.status(200).send({ endPoints: appDetails });
 };
