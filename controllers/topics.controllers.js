@@ -16,10 +16,7 @@ exports.getArticlesById = (req, res, next) => {
   const { article_id } = req.params;
   selectArticlesById(article_id)
     .then((articles) => {
-      if (articles.rowCount === 0) {
-        res.status(400).send({ message: "Bad Request" });
-      }
-      res.status(200).send({ articles: articles.rows[0] });
+      res.status(200).send({ articles });
     })
     .catch((err) => {
       next(err);

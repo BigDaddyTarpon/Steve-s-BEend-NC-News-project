@@ -4,8 +4,14 @@ exports.handle404 = (req, res) => {
 
 exports.handlePSQLError = (err, req, res, next) => {
   if (err.code === "22P02") {
-
     res.status(400).send({ message: "Bad Request" });
+  }
+  next(err);
+};
+
+exports.handleCustomError = (err, req, res, next) => {
+  if (err.message && err.status) {
+    res.status(err.status).send(err);
   }
   next(err);
 };

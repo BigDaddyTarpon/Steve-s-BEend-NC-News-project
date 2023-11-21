@@ -9,6 +9,7 @@ const {
   handle404,
   handlePSQLError,
   handleInternalServerError,
+  handleCustomError,
 } = require("./errorhandling");
 
 const app = express();
@@ -18,6 +19,7 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 
 app.use(handlePSQLError);
+app.use(handleCustomError);
 app.use(handleInternalServerError);
 
 app.all("/*", handle404);

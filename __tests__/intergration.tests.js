@@ -61,14 +61,14 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(typeof response.body.articles.article_id).toBe("number");
-        expect(typeof response.body.articles.votes).toBe("number");
-        expect(typeof response.body.articles.author).toBe("string");
-        expect(typeof response.body.articles.title).toBe("string");
-        expect(typeof response.body.articles.body).toBe("string");
-        expect(typeof response.body.articles.topic).toBe("string");
-        expect(typeof response.body.articles.created_at).toBe("string");
-        expect(typeof response.body.articles.article_img_url).toBe("string");
+        expect(typeof response.body.articles[0].article_id).toBe("number");
+        expect(typeof response.body.articles[0].votes).toBe("number");
+        expect(typeof response.body.articles[0].author).toBe("string");
+        expect(typeof response.body.articles[0].title).toBe("string");
+        expect(typeof response.body.articles[0].body).toBe("string");
+        expect(typeof response.body.articles[0].topic).toBe("string");
+        expect(typeof response.body.articles[0].created_at).toBe("string");
+        expect(typeof response.body.articles[0].article_img_url).toBe("string");
       });
   });
   test("GET: 400 returns error code and message when id is not valid", () => {
@@ -80,12 +80,12 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-  test("GET: 400 returns error code and message when id is valid but doesnt exist", () => {
+  test("GET: 404 returns error code and message when id is valid but doesnt exist", () => {
     return request(app)
       .get("/api/articles/999")
-      .expect(400)
+      .expect(404)
       .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
+        expect(response.body.message).toBe("Not Found");
       });
   });
 });
