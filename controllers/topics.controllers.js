@@ -1,10 +1,7 @@
-
 const { handlePSQLErrors } = require("../errorhandling");
 const { selectTopics, selectArticlesById } = require("../models/topics.models");
 
-const { selectTopics } = require("../models/topics.models");
 const appDetails = require("../endpoints.json");
-
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
