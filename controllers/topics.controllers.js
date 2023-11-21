@@ -1,5 +1,10 @@
+
 const { handlePSQLErrors } = require("../errorhandling");
 const { selectTopics, selectArticlesById } = require("../models/topics.models");
+
+const { selectTopics } = require("../models/topics.models");
+const appDetails = require("../endpoints.json");
+
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -21,4 +26,8 @@ exports.getArticlesById = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getEndpoints = (req, res) => {
+  res.status(200).send({ endPoints: appDetails });
 };
