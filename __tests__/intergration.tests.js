@@ -78,18 +78,16 @@ describe("/api/articles", () => {
         });
       });
   });
-  test("GET: 200 returns articles sorted by date in DESC order", ()=>{
+  test("GET: 200 returns articles sorted by date in DESC order", () => {
     return request(app)
-    .get("/api/articles")
+      .get("/api/articles")
 
-    .then((response) => {
-expect(response.body.articles.rows).toBeSortedBy('created_at', {
-  descending: true})
-
-    })
-
-  })
-  //test("GET: ")
+      .then((response) => {
+        expect(response.body.articles.rows).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
 });
 
 describe("/api/articles/:article_id", () => {
