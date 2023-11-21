@@ -14,8 +14,7 @@ exports.getTopics = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
   selectArticles()
     .then((articles) => {
-      //console.log(articles.rows, "articles.rows in control 17")
-      res.status(200).send({articles})
+      res.status(200).send({ articles });
     })
     .catch((err) => {
       console.log(err, "<--err catch in control");
