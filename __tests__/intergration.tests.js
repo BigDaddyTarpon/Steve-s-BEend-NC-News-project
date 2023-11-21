@@ -61,7 +61,7 @@ describe("/api/articles", () => {
     return request(app).get("/api/articles").expect(200);
   });
 
-  test("GET:200 returns status all articles without body property", () => {
+  test("GET:200 returns an arrayof all articles without body property", () => {
     return request(app)
       .get("/api/articles")
 
@@ -89,6 +89,7 @@ expect(response.body.articles.rows).toBeSortedBy('created_at', {
     })
 
   })
+  //test("GET: ")
 });
 
 describe("/api/articles/:article_id", () => {

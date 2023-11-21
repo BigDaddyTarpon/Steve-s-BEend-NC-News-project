@@ -1,5 +1,9 @@
 const { handlePSQLErrors } = require("../errorhandling");
-const { selectTopics, selectArticlesById, selectArticles } = require("../models/topics.models");
+const {
+  selectTopics,
+  selectArticlesById,
+  selectArticles,
+} = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
 
