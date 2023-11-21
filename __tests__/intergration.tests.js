@@ -55,7 +55,7 @@ describe("non existent endpoint", () => {
   });
 });
 
-describe.only("/api/articles", () => {
+describe("/api/articles", () => {
   test("GET:200 returns status 200", () => {
     return request(app).get("/api/articles").expect(200);
   });
@@ -77,4 +77,15 @@ describe.only("/api/articles", () => {
         });
       });
   });
+  test("GET: 200 returns articles sorted by date in DESC order", ()=>{
+    return request(app)
+    .get("/api/articles")
+
+    .then((response) => {
+expect(response.body.articles.rows).toBeSortedBy('created_at', {
+  descending: true})
+
+    })
+
+  })
 });
