@@ -1,5 +1,9 @@
 const { handlePSQLErrors } = require("../errorhandling");
-const { selectTopics, selectArticlesById, selectCommentsById } = require("../models/topics.models");
+const {
+  selectTopics,
+  selectArticlesById, selectCommentsById,
+  selectArticles,
+} = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
 
@@ -9,6 +13,16 @@ exports.getTopics = (req, res, next) => {
       res.status(200).send({ topics });
     })
 
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getArticles = (req, res, next) => {
+  selectArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
     .catch((err) => {
       next(err);
     });
