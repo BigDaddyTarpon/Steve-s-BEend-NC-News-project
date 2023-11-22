@@ -40,14 +40,15 @@ exports.selectArticlesById = (article_id) => {
     });
 };
 
-// exports.selectCommentsById(article_id) => {
-// return db
-// .query("SELECT)
+exports.selectCommentsById = (article_id) => {
+  return db
+    .query(
+      "SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY created_at DESC;",
+      [article_id]
+    )
 
-// .then(()=>{
-
-// })
-// return 
-
-// }
-
+    .then(({ rows }) => {
+      console.log(rows, "rows in model");
+      return rows;
+    });
+};

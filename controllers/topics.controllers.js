@@ -1,7 +1,8 @@
 const { handlePSQLErrors } = require("../errorhandling");
 const {
   selectTopics,
-  selectArticlesById, selectCommentsById,
+  selectArticlesById,
+  selectCommentsById,
   selectArticles,
 } = require("../models/topics.models");
 
@@ -46,9 +47,8 @@ exports.getEndpoints = (req, res) => {
 
 exports.getCommentsByArticleId = (req, res) => {
   const { article_id } = req.params;
-  selectCommentsById(article_id)
-  console.log(article_id, "<<<<<<<<<<<controller 35 - working")
-  res.status(200).send({ comments });
-};
 
-// to build model next - stopping to go back to last PR
+  selectCommentsById(article_id);
+  console.log(rows, "<<<<<<<<<<<controller 53 back from model");
+  res.status(200).send({ comments: rows });
+};
