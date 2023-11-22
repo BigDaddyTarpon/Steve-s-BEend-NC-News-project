@@ -140,11 +140,12 @@ describe("/api", () => {
 });
 
 describe("/api/articles/:article_id/comments", () => {
-  test("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
+  test.only("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
       .then((response) => {
+        console.log(response.body)
         expect(response.body.comments.length).toBe(11);
 
         for (comment of response.body.comments) {
@@ -159,15 +160,16 @@ describe("/api/articles/:article_id/comments", () => {
         }
       });
   });
-  test("GET:200 returns comments in correct sort order", ()=>{
+  test("GET:200 returns comments in correct sort order", () => {
     return request(app)
-    .get("/api/articles/1/comments")
-    .expect(200)
-    .then((response) => {
-      expect(response.body.comments).toBeSortedBy(response.body.comments.created_at)
-
-    })
-  })
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toBeSortedBy(
+          response.body.comments.created_at
+        );
+      });
+  });
   test("GET:200 returns a status 200, returns empty, but not an error when id provied no comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
