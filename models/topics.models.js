@@ -1,9 +1,32 @@
 const db = require("../db/connection");
 
 exports.selectTopics = () => {
-  return db.query("SELECT * FROM topics").then((topics) => {
+  return db.query("SELECT * FROM topics;").then((topics) => {
     return topics.rows;
   });
+};
+
+exports.selectArticles = () => {
+  return db
+    .query(
+      `SELECT 
+      articles.article_id, 
+      title,
+      topic,
+      articles.author,
+      articles.created_at,
+      articles.votes,
+      article_img_url, 
+      
+      COUNT(comments.comment_id) AS comment_count
+      FROM articles
+      JOIN comments ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id
+      ORDER BY created_at DESC;`
+    )
+    .then((articles) => {
+      return articles.rows;
+    });
 };
 
 exports.selectArticlesById = (article_id) => {

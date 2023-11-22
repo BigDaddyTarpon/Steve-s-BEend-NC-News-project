@@ -56,6 +56,43 @@ describe("non existent endpoint", () => {
   });
 });
 
+describe("/api/articles", () => {
+  test("GET:200 returns status 200", () => {
+    return request(app).get("/api/articles").expect(200);
+  });
+
+  test("GET:200 returns an arrayof all articles including a comment_count but without body property", () => {
+    return request(app)
+      .get("/api/articles")
+      .then((response) => {
+        expect(typeof response.body.articles.body).toBe("undefined");
+
+        for (article of response.body.articles) {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
+          });
+        }
+      });
+  });
+});
+test("GET: 200 returns articles sorted by date in DESC order", () => {
+  return request(app)
+    .get("/api/articles")
+
+    .then((response) => {
+      expect(response.body.articles).toBeSortedBy("created_at", {
+        descending: true,
+      });
+    });
+});
+
 describe("/api/articles/:article_id", () => {
   test("GET:200 returns the article with appropriate properties", () => {
     return request(app)
