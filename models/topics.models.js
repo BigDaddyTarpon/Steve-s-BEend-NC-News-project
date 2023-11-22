@@ -17,13 +17,13 @@ exports.selectArticlesById = (article_id) => {
     });
 };
 
-exports.selectCommentsById(article_id) => {
-return db
-.query("SELECT)
+// exports.selectCommentsById(article_id) => {
+// return db
+// .query("SELECT)
 
-.then(()=>{
+// .then(()=>{
 
-})
-return 
+// })
+// return 
 
-}
+// }
