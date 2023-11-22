@@ -5,6 +5,7 @@ const {
   getArticles,
   getArticlesById,
   getEndpoints,
+  getComments,
 } = require("./controllers/topics.controllers");
 
 const {
@@ -17,14 +18,13 @@ const {
 const app = express();
 
 app.get("/api/topics", getTopics);
-
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
+app.get("/api", getEndpoints);
+app.all("/*", handle404);
+
 app.use(handlePSQLError);
 app.use(handleCustomError);
 app.use(handleInternalServerError);
 
-app.get("/api", getEndpoints);
-
-app.all("/*", handle404);
 module.exports = app;

@@ -61,33 +61,36 @@ describe("/api/articles", () => {
     return request(app).get("/api/articles").expect(200);
   });
 
-  test("GET:200 returns an arrayof all articles without body property", () => {
+  test("GET:200 returns an arrayof all articles including a comment_count but without body property", () => {
     return request(app)
       .get("/api/articles")
-
       .then((response) => {
-        response.body.articles.rows.forEach((article) => {
-          expect(typeof article.article_id).toBe("number");
-          expect(typeof article.votes).toBe("number");
-          expect(typeof article.author).toBe("string");
-          expect(typeof article.title).toBe("string");
-          expect(typeof article.body).toBe("undefined");
-          expect(typeof article.topic).toBe("string");
-          expect(typeof article.created_at).toBe("string");
-          expect(typeof article.article_img_url).toBe("string");
-        });
+        expect(typeof response.body.articles.body).toBe("undefined");
+
+        for (article of response.body.articles) {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
+          });
+        }
       });
   });
-  test("GET: 200 returns articles sorted by date in DESC order", () => {
-    return request(app)
-      .get("/api/articles")
+});
+test("GET: 200 returns articles sorted by date in DESC order", () => {
+  return request(app)
+    .get("/api/articles")
 
-      .then((response) => {
-        expect(response.body.articles.rows).toBeSortedBy("created_at", {
-          descending: true,
-        });
+    .then((response) => {
+      expect(response.body.articles).toBeSortedBy("created_at", {
+        descending: true,
       });
-  });
+    });
 });
 
 describe("/api/articles/:article_id", () => {

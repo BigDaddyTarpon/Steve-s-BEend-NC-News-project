@@ -9,16 +9,23 @@ exports.selectTopics = () => {
 exports.selectArticles = () => {
   return db
     .query(
-      `SELECT article_id,
-  title,
-  topic,
-  author,
-  created_at,
-  votes,
-  article_img_url FROM articles ORDER BY created_at DESC;`
+      `SELECT 
+      articles.article_id, 
+      title,
+      topic,
+      articles.author,
+      articles.created_at,
+      articles.votes,
+      article_img_url, 
+      
+      COUNT(comments.comment_id) AS comment_count
+      FROM articles
+      JOIN comments ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id
+      ORDER BY created_at DESC;`
     )
     .then((articles) => {
-      return articles;
+      return articles.rows;
     });
 };
 
@@ -30,21 +37,5 @@ exports.selectArticlesById = (article_id) => {
         return Promise.reject({ status: 404, message: "Not Found" });
       }
       return rows;
-    });
-};
-
-exports.selectArticles = () => {
-  return db
-    .query(
-      `SELECT article_id,
-  title,
-  topic,
-  author,
-  created_at,
-  votes,
-  article_img_url FROM articles ORDER BY created_at DESC;`
-    )
-    .then((articles) => {
-      return articles;
     });
 };
