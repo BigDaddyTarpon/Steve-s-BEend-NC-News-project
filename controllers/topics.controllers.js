@@ -1,5 +1,5 @@
 const { handlePSQLErrors } = require("../errorhandling");
-const { selectTopics, selectArticlesById } = require("../models/topics.models");
+const { selectTopics, selectArticlesById, selectCommentsById } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
 
@@ -32,7 +32,8 @@ exports.getEndpoints = (req, res) => {
 
 exports.getCommentsByArticleId = (req, res) => {
   const { article_id } = req.params;
-  console.log(article_id, "<<<<<<<<<<<controller - working")
+  selectCommentsById(article_id)
+  console.log(article_id, "<<<<<<<<<<<controller 35 - working")
   res.status(200).send({ comments });
 };
 

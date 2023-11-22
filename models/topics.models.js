@@ -16,3 +16,14 @@ exports.selectArticlesById = (article_id) => {
       return rows;
     });
 };
+
+exports.selectCommentsById(article_id) => {
+return db
+.query("SELECT)
+
+.then(()=>{
+
+})
+return 
+
+}
