@@ -154,11 +154,20 @@ describe("/api/articles/:article_id/comments", () => {
             created_at: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
-            article_id: expect.any(Number),
+            article_id: 1,
           });
         }
       });
   });
+  test("GET:200 returns comments in correct sort order", ()=>{
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then((response) => {
+      expect(response.body.comments).toBeSortedBy(response.body.comments.created_at)
+
+    })
+  })
   test("GET:200 returns a status 200, returns empty, but not an error when id provied no comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
