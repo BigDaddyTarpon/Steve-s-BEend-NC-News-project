@@ -46,9 +46,7 @@ exports.selectCommentsById = (article_id) => {
       "SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY created_at DESC;",
       [article_id]
     )
-
     .then(({ rows }) => {
-      console.log(rows, "rows in model");
       return rows;
     });
 };

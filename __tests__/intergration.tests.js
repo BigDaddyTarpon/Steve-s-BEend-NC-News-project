@@ -137,14 +137,51 @@ describe("/api", () => {
         expect(response.body.endPoints).toEqual(endPoints);
       });
   });
-  describe.only("/api/articles/:article_id/comments", () => {
-    test("GET:200 returns a status 200", () => {
-      return request(app)
-        .get("/api/articles/1/comments")
-        //.expect(200)
-        .then((response) => {
-          console.log(response.body, "response.body in test");
-        });
-    });
+});
+
+describe("/api/articles/:article_id/comments", () => {
+  test("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments.length).toBe(11);
+
+        for (comment of response.body.comments) {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
+        }
+      });
+  });
+  test("GET:200 returns a status 200, returns empty, but not an error when id provied no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments.length).toBe(0);
+      });
+  });
+
+  test("GET: 404 returns error code and message when id is valid but doesnt exist", () => {
+    return request(app)
+      .get("/api/articles/999/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+  test("GET: 400 returns error code and message when id is not valid", () => {
+    return request(app)
+      .get("/api/articles/banana/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
   });
 });

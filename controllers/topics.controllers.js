@@ -45,10 +45,18 @@ exports.getEndpoints = (req, res) => {
   res.status(200).send({ endPoints: appDetails });
 };
 
-exports.getCommentsByArticleId = (req, res) => {
+exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
 
-  selectCommentsById(article_id);
-  console.log(rows, "<<<<<<<<<<<controller 53 back from model");
-  res.status(200).send({ comments: rows });
+  selectArticlesById(article_id)
+    .then(() => {
+      return selectCommentsById(article_id);
+    })
+    .then((rows) => {
+      res.status(200).send({ comments: rows });
+    })
+
+    .catch((err) => {
+      next(err);
+    });
 };
