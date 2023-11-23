@@ -94,7 +94,7 @@ test("GET: 200 returns articles sorted by date in DESC order", () => {
 });
 
 describe("/api/articles/:article_id", () => {
-  test.only("GET:200 returns the article with appropriate properties", () => {
+  test("GET:200 returns the article with appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -291,14 +291,55 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 describe.only("/api/articles/:article_id", () => {
-  test("PATCH: 200 updates the votes on an article by the article_id then returns the updated article", () => {
+  test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
     return request(app)
-      .get("/api/articles/1")
+      .patch("/api/articles/1")
       .send({ inc_votes: 5555 })
-      .expect(200)
+      .expect(202)
       .then((response) => {
-        console.log(response.body, "<<<<<<<in test");
-        //expect(response.body.message).toBe("OK")
+        
+        
+        expect(response.body.updatedArticle[0].votes).toBe(5655)
+        expect(response.body.updatedArticle[0].article_id).toBe(1)
+        expect(response.body.updatedArticle[0].author).toBe("butter_bridge");
+        expect(response.body.updatedArticle[0].title).toBe(
+          "Living in the shadow of a great man"
+        );
+        expect(response.body.updatedArticle[0].body).toBe(
+          "I find this existence challenging"
+        );
+        expect(response.body.updatedArticle[0].topic).toBe("mitch");
+        expect(typeof response.body.updatedArticle[0].created_at).toBe("string");
+        expect(typeof response.body.updatedArticle[0].article_img_url).toBe("string");
       });
   });
+  test("should not change any properties of any other articles", ()=>{
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 5555 })
+      .expect(202)
+      .then((response) => {
+        expect(response.body.updatedArticle.length).toBe(1)
+      })
+  })
+  test("should return 400 when given an invalid article_id", ()=>{
+    return request(app)
+      .patch("/api/articles/banana")
+      .send({ inc_votes: 5555 })
+      .expect(400)
+      .then((response) => {
+        console.log(response.body, "<<<<<<<in test");
+        expect(response.body.message).toBe("Bad Request")
+      })
+  })
+  test("should return 404 when given avalid but nonexistent article_id", ()=>{
+    return request(app)
+      .patch("/api/articles/999")
+      .send({ inc_votes: 5555 })
+      .expect(404)
+      .then((response) => {
+        console.log(response.body, "<<<<<<<in test");
+        expect(response.body.message).toBe("Not Found")
+      })
+  })
 });

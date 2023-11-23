@@ -64,16 +64,22 @@ exports.insertCommentByArticleId = (body, username, article_id) => {
       return rows[0];
     });
 };
-exports.adjustVotes = (article_id) =>{
+exports.adjustVotes = (article_id, inc_votes) =>{
   return db
     .query(
-      "UPDATE articles SET votes = articles.votes + inc_vote FROM comments WHERE artlcles.article_id = $1 RETURNING *;",
-      [article_id]
+      `UPDATE articles 
+      SET votes = votes + $1  
+      WHERE article_id = $2 
+      RETURNING *
+      ;`,
+      [inc_votes, article_id]
     )
-    .then(({ rows }) => {
-      console.log(rows, ",,,,,,,,,,,,,in model")
+    .then(({rows}) => {
+      
       return rows;
-    });
+    })
+    .catch((err)=>{ console.log(err in module, "ERR IN MOD XXXXXXXXXXX")})
 }
 // UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE articles.article_id = 1 RETURNING articles.votes;
 // UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE articles.article_id = 1 RETURNING *;
+//.then(({ rows }) => {
