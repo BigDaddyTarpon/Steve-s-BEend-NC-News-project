@@ -94,17 +94,22 @@ test("GET: 200 returns articles sorted by date in DESC order", () => {
 });
 
 describe("/api/articles/:article_id", () => {
-  test("GET:200 returns the article with appropriate properties", () => {
+  test.only("GET:200 returns the article with appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(typeof response.body.articles[0].article_id).toBe("number");
-        expect(typeof response.body.articles[0].votes).toBe("number");
-        expect(typeof response.body.articles[0].author).toBe("string");
-        expect(typeof response.body.articles[0].title).toBe("string");
-        expect(typeof response.body.articles[0].body).toBe("string");
-        expect(typeof response.body.articles[0].topic).toBe("string");
+        console.log(response.body.articles[0], "in test");
+        expect(response.body.articles[0].article_id).toBe(1);
+        expect(response.body.articles[0].votes).toBe(100);
+        expect(response.body.articles[0].author).toBe("butter_bridge");
+        expect(response.body.articles[0].title).toBe(
+          "Living in the shadow of a great man"
+        );
+        expect(response.body.articles[0].body).toBe(
+          "I find this existence challenging"
+        );
+        expect(response.body.articles[0].topic).toBe("mitch");
         expect(typeof response.body.articles[0].created_at).toBe("string");
         expect(typeof response.body.articles[0].article_img_url).toBe("string");
       });
@@ -285,17 +290,15 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
-describe.only("/api/articles/:article_id", ()=>{
-  test("GET: 200 updates the votes on an article by the article_id then returns the updated artice", ()=>{
+describe.only("/api/articles/:article_id", () => {
+  test("PATCH: 200 updates the votes on an article by the article_id then returns the updated article", () => {
     return request(app)
       .get("/api/articles/1")
-      .send( { inc_votes: 555 })
+      .send({ inc_votes: 5555 })
       .expect(200)
-      // .then((response) => {
-      //   console.log(response.body, "<<<<<<<in test")
-      //   expect(response.body.message).toBe("OK")
-
-      //})
-  })
-})
-
+      .then((response) => {
+        console.log(response.body, "<<<<<<<in test");
+        //expect(response.body.message).toBe("OK")
+      });
+  });
+});

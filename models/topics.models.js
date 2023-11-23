@@ -67,7 +67,7 @@ exports.insertCommentByArticleId = (body, username, article_id) => {
 exports.adjustVotes = (article_id) =>{
   return db
     .query(
-      "UPDATE articles SET votes = articles.votes + inc_vote WHERE comments.article_id = $1 RETURNING *;",
+      "UPDATE articles SET votes = articles.votes + inc_vote FROM comments WHERE artlcles.article_id = $1 RETURNING *;",
       [article_id]
     )
     .then(({ rows }) => {
@@ -75,4 +75,5 @@ exports.adjustVotes = (article_id) =>{
       return rows;
     });
 }
-// UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE comments.article_id = 1 RETURNING *;
+// UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE articles.article_id = 1 RETURNING articles.votes;
+// UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE articles.article_id = 1 RETURNING *;

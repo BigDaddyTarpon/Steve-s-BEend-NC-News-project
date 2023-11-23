@@ -80,12 +80,14 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.incrementVotesByArticleId = (req, res, next) =>{
  const { article_id } = req.params
  const { inc_votes } = res.body
+ console.log(req.body, "controll 83")
 adjustVotes(article_id, inc_vote)
 .then((updatedArticle)=>{
   res.status(202).send({ updatedArticle });
 
 })
 .catch((err) => {
+  console.log(err, "<<<<<<<<<<err control 90")
   next(err);
 })
 
