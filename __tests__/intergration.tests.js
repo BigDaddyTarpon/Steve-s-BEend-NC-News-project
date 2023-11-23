@@ -150,28 +150,36 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(201)
       .then((response) => {
         expect(response.body.comment).toMatchObject({
-          comment_id: expect.any(Number),
-          votes: expect.any(Number),
+          comment_id: 19,
+          votes: 0,
           created_at: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
+          author: "butter_bridge",
+          body: "testing, testing, 123!",
           article_id: 1,
         });
       });
   });
-  // test("POST:400 should return Bad Request if invalid body field", ()=>{
-  //   return request(app)
-  //     .post("/api/articles/1/comments")
-  //     .send({
-  //       body: 7,
-  //       username: "butter_bridge",
-  //     })
-  //     .expect(400)
-  //     .then((response) => {
+  test("POST: 201 accepts an object with username and body, ignores additional elemnets on the body and returns the correctly posted comment", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        body: "testing, testing, 123!",
+        bananas: "banana",
+        username: "butter_bridge",
+      })
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment).toMatchObject({
+          comment_id: 19,
+          votes: 0,
+          created_at: expect.any(String),
+          author: "butter_bridge",
+          body: "testing, testing, 123!",
+          article_id: 1,
+        });
+      });
+  });
 
-  //     })
-
-  //})
   test("POST:400 should return Bad Request for missing input fields", () => {
     return request(app)
       .post("/api/articles/1/comments")
