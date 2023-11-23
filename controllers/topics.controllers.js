@@ -44,15 +44,17 @@ exports.getArticlesById = (req, res, next) => {
 
 exports.addCommentbyArticleID = (req, res, next) => {
   
-  // const { article_id } = req.params;
+  const { article_id } = req.params;
+const { body, username } = req.body
+  //console.log(req.body, "req.body in controller");
   // const body = req.body.body
   // const username = req.body.username;
-  // console.log(body, "<<<<<<<< body  in controller");
-  // console.log(username, "<<<<<<<< username  in controller");
+  console.log(body, "<<<<<<<< body  in controller");
+  console.log(username, "<<<<<<<< username  in controller");
   // console.log(article_id, "<<<<<<<< id  in controller");
-  insertCommentByArticleId(req.body.body, req.body.username, req.params.article_id)
-  //insertCommentByArticleId(body, username, article_id)
+  insertCommentByArticleId(body, username, article_id)
     .then((comment) => {
+      console.log(comment, "comment in controller 56")
       res.status(201).send({ comment });
     })
 

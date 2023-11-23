@@ -141,20 +141,22 @@ describe("/api", () => {
 
 describe.only("/api/articles/:article_id/comments", () => {
   test("POST: 201 accepts an object with username and body, returns the posted comment", () => {
-    // const newComment = {
-    //  commentText: "testing, testing, 123!",
-    //  username: "icellusedkars",
-    // };
     return request(app)
       .post("/api/articles/1/comments")
       .send({
-        body: 'testing, testing, 123!',
-        username: 'butter_bridge'
-       })
-      //.expect(201)
+        body: "testing, testing, 123!",
+        username: "butter_bridge",
+      })
+      .expect(201)
       .then((response) => {
-        console.log(response.body, "<<<<<<<<<<<<response in test");
-        //check out 'objectContaining' to test 'includes but not limited to' test we used before
+        expect(response.body.comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          article_id: 1,
+        });
       });
   });
 });
@@ -165,7 +167,7 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/1/comments")
       .expect(200)
       .then((response) => {
-        console.log(response.body)
+        console.log(response.body);
         expect(response.body.comments.length).toBe(11);
 
         for (comment of response.body.comments) {
