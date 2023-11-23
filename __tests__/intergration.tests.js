@@ -290,7 +290,7 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
-describe.only("/api/articles/:article_id", () => {
+describeg("/api/articles/:article_id", () => {
   test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
     return request(app)
       .patch("/api/articles/1")
