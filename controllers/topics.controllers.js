@@ -2,6 +2,7 @@ const { handlePSQLErrors } = require("../errorhandling");
 const {
   selectTopics,
   selectArticlesById,
+  selectCommentsById,
   selectArticles,
 } = require("../models/topics.models");
 
@@ -30,6 +31,7 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticlesById = (req, res, next) => {
   const { article_id } = req.params;
+
   selectArticlesById(article_id)
     .then((articles) => {
       res.status(200).send({ articles });
@@ -41,4 +43,20 @@ exports.getArticlesById = (req, res, next) => {
 
 exports.getEndpoints = (req, res) => {
   res.status(200).send({ endPoints: appDetails });
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+
+  selectArticlesById(article_id)
+    .then(() => {
+      return selectCommentsById(article_id);
+    })
+    .then((rows) => {
+      res.status(200).send({ comments: rows });
+    })
+
+    .catch((err) => {
+      next(err);
+    });
 };
