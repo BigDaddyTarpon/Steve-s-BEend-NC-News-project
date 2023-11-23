@@ -4,6 +4,7 @@ const {
   selectArticlesById,
   selectCommentsById,
   selectArticles,
+  insertCommentByArticleId,
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -36,6 +37,20 @@ exports.getArticlesById = (req, res, next) => {
     .then((articles) => {
       res.status(200).send({ articles });
     })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.addCommentbyArticleID = (req, res, next) => {
+  const { article_id } = req.params;
+  const { body, username } = req.body;
+
+  insertCommentByArticleId(body, username, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+
     .catch((err) => {
       next(err);
     });

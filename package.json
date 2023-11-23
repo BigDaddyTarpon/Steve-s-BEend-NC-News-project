@@ -7,7 +7,8 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "testPSQL": "psql -f ./playground.sql > playground-sql-output.txt"
   },
   "repository": {
     "type": "git",
@@ -35,8 +36,8 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "jest-extended/all", "jest-sorted"
+      "jest-extended/all",
+      "jest-sorted"
     ]
   }
-  
 }
