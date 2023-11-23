@@ -6,6 +6,7 @@ const {
   getArticlesById,
   getEndpoints,
   getComments,
+  getCommentsByArticleId,
   addCommentbyArticleID,
 } = require("./controllers/topics.controllers");
 
@@ -22,10 +23,11 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
 app.get("/api", getEndpoints);
-app.all("/*", handle404);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.use(handlePSQLError);
 app.use(handleCustomError);
 app.use(handleInternalServerError);
-
+app.all("/*", handle404);
 module.exports = app;

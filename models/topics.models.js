@@ -39,6 +39,17 @@ exports.selectArticlesById = (article_id) => {
       return rows;
     });
 };
+
+exports.selectCommentsById = (article_id) => {
+  return db
+    .query(
+      "SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY created_at DESC;",
+      [article_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
 exports.insertCommentByArticleId = (body, username, article_id) => {
   console.log(body, username, article_id, "<<<<<<<<<<<in model 43")
   return db
