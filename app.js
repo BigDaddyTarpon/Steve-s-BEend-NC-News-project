@@ -7,6 +7,7 @@ const {
   getEndpoints,
   getComments,
   getCommentsByArticleId,
+  incrementVotesByArticleId,
 } = require("./controllers/topics.controllers");
 
 const {
@@ -24,7 +25,7 @@ app.get("/api/articles", getArticles);
 app.get("/api", getEndpoints);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
-
+app.patch("/api/articles/:article_id", incrementVotesByArticleId)
 app.use(handlePSQLError);
 app.use(handleCustomError);
 app.use(handleInternalServerError);

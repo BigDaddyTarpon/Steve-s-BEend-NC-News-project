@@ -50,3 +50,15 @@ exports.selectCommentsById = (article_id) => {
       return rows;
     });
 };
+exports.adjustVotes = (article_id) =>{
+  return db
+    .query(
+      "UPDATE articles SET votes = articles.votes + inc_vote WHERE comments.article_id = $1 RETURNING *;",
+      [article_id]
+    )
+    .then(({ rows }) => {
+      console.log(rows, ",,,,,,,,,,,,,in model")
+      return rows;
+    });
+}
+// UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE comments.article_id = 1 RETURNING *;

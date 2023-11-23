@@ -145,7 +145,7 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/1/comments")
       .expect(200)
       .then((response) => {
-        console.log(response.body)
+      
         expect(response.body.comments.length).toBe(11);
 
         for (comment of response.body.comments) {
@@ -196,3 +196,17 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
+describe.only("/api/articles/:article_id", ()=>{
+  test("GET: 200 updates the votes on an article by the article_id then returns the updated artice", ()=>{
+    return request(app)
+      .get("/api/articles/1")
+      .send( { inc_votes: 555 })
+      .expect(200)
+      // .then((response) => {
+      //   console.log(response.body, "<<<<<<<in test")
+      //   expect(response.body.message).toBe("OK")
+
+      //})
+  })
+})
+

@@ -4,6 +4,7 @@ const {
   selectArticlesById,
   selectCommentsById,
   selectArticles,
+  adjustVotes,
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -60,3 +61,17 @@ exports.getCommentsByArticleId = (req, res, next) => {
       next(err);
     });
 };
+
+exports.incrementVotesByArticleId = (req, res, next) =>{
+ const { article_id } = req.params
+ const { inc_votes } = res.body
+adjustVotes(article_id, inc_vote)
+.then((updatedArticle)=>{
+  res.status(202).send({ updatedArticle });
+
+})
+.catch((err) => {
+  next(err);
+})
+
+}
