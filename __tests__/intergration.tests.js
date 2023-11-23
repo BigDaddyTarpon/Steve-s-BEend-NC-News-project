@@ -138,3 +138,23 @@ describe("/api", () => {
       });
   });
 });
+
+describe.only("/api/articles/:article_id/comments", () => {
+  test("POST: 201 accepts an object with username and body, returns the posted comment", () => {
+    // const newComment = {
+    //  commentText: "testing, testing, 123!",
+    //  username: "icellusedkars",
+    // };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        body: 'testing, testing, 123!',
+        username: 'butter_bridge'
+       })
+      //.expect(201)
+      .then((response) => {
+        console.log(response.body, "<<<<<<<<<<<<response in test");
+        //check out 'objectContaining' to test 'includes but not limited to' test we used before
+      });
+  });
+});

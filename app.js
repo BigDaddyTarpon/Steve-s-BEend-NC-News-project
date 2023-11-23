@@ -6,6 +6,7 @@ const {
   getArticlesById,
   getEndpoints,
   getComments,
+  addCommentbyArticleID,
 } = require("./controllers/topics.controllers");
 
 const {
@@ -16,7 +17,7 @@ const {
 } = require("./errorhandling");
 
 const app = express();
-
+app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);

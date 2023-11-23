@@ -39,3 +39,22 @@ exports.selectArticlesById = (article_id) => {
       return rows;
     });
 };
+exports.insertCommentByArticleId = (body, username, article_id) => {
+  console.log(body, username, article_id, "<<<<<<<<<<<in model 43")
+  return db
+    .query(
+      `INSERT INTO comments(body, author, article_id) 
+      VALUES ($1, $2, $3) 
+      RETURNING *
+      ;`,
+      [body, username, article_id]
+    )
+    .then(({ rows }) => rows[0])
+
+  
+};
+//INSERT INTO comments(body, author, article_id) VALUES("test", "tester", 1) RETURNING *;
+//INSERT INTO comments(body, author, article_id) VALUES(1, 1, 1) RETURNING *;
+//INSERT INTO comments (body, author, article_id) VALUES (1, 1, 1) RETURNING *;
+//INSERT INTO comments(body, author, article_id) VALUES(author, author, 1) RETURNING *;
+//INSERT INTO comments(body, author, article_id) VALUES('test', 'butter_bridge', 1) RETURNING *;
