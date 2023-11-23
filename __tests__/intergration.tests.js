@@ -140,7 +140,7 @@ describe("/api", () => {
 });
 
 describe("/api/articles/:article_id/comments", () => {
-  test.only("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
+  test("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
