@@ -51,7 +51,6 @@ exports.selectCommentsById = (article_id) => {
     });
 };
 exports.insertCommentByArticleId = (body, username, article_id) => {
-  console.log(body, username, article_id, "<<<<<<<<<<<in model 43");
   return db
     .query(
       `INSERT INTO comments(body, author, article_id) 
@@ -60,16 +59,8 @@ exports.insertCommentByArticleId = (body, username, article_id) => {
       ;`,
       [body, username, article_id]
     )
-    // .then(() => {
-    //   console.log("in model 64");
-    // })
+
     .then(({ rows }) => {
-      //console.log("in model")
       return rows[0];
     });
 };
-//INSERT INTO comments(body, author, article_id) VALUES("test", "tester", 1) RETURNING *;
-//INSERT INTO comments(body, author, article_id) VALUES(1, 1, 1) RETURNING *;
-//INSERT INTO comments (body, author, article_id) VALUES (1, 1, 1) RETURNING *;
-//INSERT INTO comments(body, author, article_id) VALUES(author, author, 1) RETURNING *;
-//INSERT INTO comments(body, author, article_id) VALUES('test', 'butter_bridge', 1) RETURNING *;

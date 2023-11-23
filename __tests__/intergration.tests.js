@@ -139,7 +139,7 @@ describe("/api", () => {
   });
 });
 
-describe.only("/api/articles/:article_id/comments", () => {
+describe("/api/articles/:article_id/comments", () => {
   test("POST: 201 accepts an object with username and body, returns the posted comment", () => {
     return request(app)
       .post("/api/articles/1/comments")
@@ -159,6 +159,66 @@ describe.only("/api/articles/:article_id/comments", () => {
         });
       });
   });
+  // test("POST:400 should return Bad Request if invalid body field", ()=>{
+  //   return request(app)
+  //     .post("/api/articles/1/comments")
+  //     .send({
+  //       body: 7,
+  //       username: "butter_bridge",
+  //     })
+  //     .expect(400)
+  //     .then((response) => {
+
+  //     })
+
+  //})
+  test("POST:400 should return Bad Request for missing input fields", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({})
+
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+  test("POST:404 should return Not Found for invalid author field", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        body: "testing, testing, 123!",
+        username: "Elusive",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+
+  test("POST:400 should return Bad Request for invalid article id input", () => {
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .send({
+        body: "testing, testing, 123!",
+        username: "butter_bridge",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+  test("POST:404 should return Not Found if valid but not existing article_id", () => {
+    return request(app)
+      .post("/api/articles/999/comments")
+      .send({
+        body: "testing, testing, 123!",
+        username: "butter_bridge",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
@@ -167,7 +227,6 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/1/comments")
       .expect(200)
       .then((response) => {
-        console.log(response.body);
         expect(response.body.comments.length).toBe(11);
 
         for (comment of response.body.comments) {
