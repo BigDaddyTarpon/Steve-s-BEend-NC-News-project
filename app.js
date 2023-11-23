@@ -5,11 +5,10 @@ const {
   getArticles,
   getArticlesById,
   getEndpoints,
-  getComments,
   getCommentsByArticleId,
+  addCommentbyArticleID,
   incrementVotesByArticleId,
 } = require("./controllers/topics.controllers");
-
 const {
   handle404,
   handlePSQLError,
@@ -18,7 +17,9 @@ const {
 } = require("./errorhandling");
 
 const app = express();
+app.use(express.json());
 
+app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
