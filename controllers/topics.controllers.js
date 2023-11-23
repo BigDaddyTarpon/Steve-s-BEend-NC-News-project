@@ -83,13 +83,12 @@ exports.incrementVotesByArticleId = (req, res, next) => {
   // use article by id to check it exists, again
   selectArticlesById(article_id)
     .then(() => {
-      return adjustVotes(article_id, inc_votes)
+      return adjustVotes(article_id, inc_votes);
     })
     .then((updatedArticle) => {
       res.status(202).send({ updatedArticle });
     })
     .catch((err) => {
-      console.log(err, "<<<<<<<<<<err control 90");
       next(err);
     });
 };

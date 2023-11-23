@@ -64,7 +64,7 @@ exports.insertCommentByArticleId = (body, username, article_id) => {
       return rows[0];
     });
 };
-exports.adjustVotes = (article_id, inc_votes) =>{
+exports.adjustVotes = (article_id, inc_votes) => {
   return db
     .query(
       `UPDATE articles 
@@ -74,12 +74,10 @@ exports.adjustVotes = (article_id, inc_votes) =>{
       ;`,
       [inc_votes, article_id]
     )
-    .then(({rows}) => {
-      
+    .then(({ rows }) => {
       return rows;
     })
-    .catch((err)=>{ console.log(err in module, "ERR IN MOD XXXXXXXXXXX")})
-}
-// UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE articles.article_id = 1 RETURNING articles.votes;
-// UPDATE articles SET votes = articles.votes + 5555 FROM comments WHERE articles.article_id = 1 RETURNING *;
-//.then(({ rows }) => {
+    .catch((err) => {
+      console.log(err in module, "ERR IN MOD XXXXXXXXXXX");
+    });
+};
