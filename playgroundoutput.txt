@@ -1,7 +1,0 @@
-run with 
-psql -f ./playground.sql > playground-sql-output.txt
-
-"can set as a script"
-put into package.json, under scripts --> "testPSQL": "psql -f ./playground.sql > playground-sql-output.txt"
-
-then in terminal; npm run testPSQL

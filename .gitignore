@@ -1,5 +1,5 @@
 node_modules
 .env.*
 playground.sql
-playgroundoutput.txt
-playground-sql-output.txt
+./playgroundoutput.txt
+./playground-sql-output.txt
