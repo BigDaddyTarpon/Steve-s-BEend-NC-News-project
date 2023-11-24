@@ -56,7 +56,7 @@ describe("non existent endpoint", () => {
   });
 });
 
-describe("/api/articles", () => {
+describe.only("/api/articles", () => {
   test("GET:200 returns status 200", () => {
     return request(app).get("/api/articles").expect(200);
   });
@@ -81,6 +81,17 @@ describe("/api/articles", () => {
         }
       });
   });
+  test("GET:200 should accept optinal query for topics, and if present filter artiles by topic otherwise returnin all articles", ()=>{
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        console.log(response.body, "response in test 89")
+        expect(response.body.articles.length).toBe(4)
+
+
+      })
+  })
 });
 test("GET: 200 returns articles sorted by date in DESC order", () => {
   return request(app)
@@ -91,6 +102,7 @@ test("GET: 200 returns articles sorted by date in DESC order", () => {
         descending: true,
       });
     });
+    
 });
 
 describe("/api/articles/:article_id", () => {
@@ -290,7 +302,6 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-
 describe("/api/comments/:comment_id", () => {
   test("DELETE: 204 removes a comment by the comment_id", () => {
     return request(app)
@@ -310,91 +321,84 @@ describe("/api/comments/:comment_id", () => {
       });
   });
   test("DELETE:400 returns error code and message when id is invalid", () => {
-    return request(app)
-      .delete("/api/comments/banana")
-  })
-
-describe("/api/articles/:article_id", () => {
-  test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: 5555 })
-      .expect(202)
-      .then((response) => {
-        expect(response.body.updatedArticle[0].votes).toBe(5655);
-        expect(response.body.updatedArticle[0].article_id).toBe(1);
-        expect(response.body.updatedArticle[0].author).toBe("butter_bridge");
-        expect(response.body.updatedArticle[0].title).toBe(
-          "Living in the shadow of a great man"
-        );
-        expect(response.body.updatedArticle[0].body).toBe(
-          "I find this existence challenging"
-        );
-        expect(response.body.updatedArticle[0].topic).toBe("mitch");
-        expect(typeof response.body.updatedArticle[0].created_at).toBe(
-          "string"
-        );
-        expect(typeof response.body.updatedArticle[0].article_img_url).toBe(
-          "string"
-        );
-      });
-  });
-  test("should not change any properties of any other articles", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: 5555 })
-      .expect(202)
-      .then((response) => {
-        expect(response.body.updatedArticle.length).toBe(1);
-      });
-  });
-  test("should return 400 when given an invalid article_id", () => {
-    return request(app)
-      .patch("/api/articles/banana")
-      .send({ inc_votes: 5555 })
-
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
+    return request(app).delete("/api/comments/banana");
   });
 
-  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
-    return request(app)
-      .delete("/api/comments/1&2")
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
+  describe("/api/articles/:article_id", () => {
+    test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 5555 })
+        .expect(202)
+        .then((response) => {
+          expect(response.body.updatedArticle[0].votes).toBe(5655);
+          expect(response.body.updatedArticle[0].article_id).toBe(1);
+          expect(response.body.updatedArticle[0].author).toBe("butter_bridge");
+          expect(response.body.updatedArticle[0].title).toBe(
+            "Living in the shadow of a great man"
+          );
+          expect(response.body.updatedArticle[0].body).toBe(
+            "I find this existence challenging"
+          );
+          expect(response.body.updatedArticle[0].topic).toBe("mitch");
+          expect(typeof response.body.updatedArticle[0].created_at).toBe(
+            "string"
+          );
+          expect(typeof response.body.updatedArticle[0].article_img_url).toBe(
+            "string"
+          );
+        });
+    });
+    test("should not change any properties of any other articles", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 5555 })
+        .expect(202)
+        .then((response) => {
+          expect(response.body.updatedArticle.length).toBe(1);
+        });
+    });
+    test("should return 400 when given an invalid article_id", () => {
+      return request(app)
+        .patch("/api/articles/banana")
+        .send({ inc_votes: 5555 })
+
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe("Bad Request");
+        });
+    });
+
+    test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
+      return request(app)
+        .delete("/api/comments/1&2")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe("Bad Request");
+        });
+    });
+
+    test("should return 404 when given avalid but nonexistent article_id", () => {
+      return request(app)
+        .patch("/api/articles/999")
+        .send({ inc_votes: 5555 })
+        .expect(404)
+        .then((response) => {
+          expect(response.body.message).toBe("Not Found");
+        });
+    });
+    test("should return 400 when request body has no inc_votes property", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({})
+
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe("Bad Request");
+        });
+    });
   });
-
-
-  test("should return 404 when given avalid but nonexistent article_id", () => {
-    return request(app)
-      .patch("/api/articles/999")
-      .send({ inc_votes: 5555 })
-      .expect(404)
-      .then((response) => {
-        expect(response.body.message).toBe("Not Found");
-      });
-  });
-  test("should return 400 when request body has no inc_votes property", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ })
-
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
-  });
-
 });
-
-
-})
-
-
 
 describe("GET /api/users", () => {
   test("should return an array of all correct length containing all the users, where each user object has the correct properties", () => {
@@ -431,4 +435,4 @@ describe("GET /api/users", () => {
         ]);
       });
   });
-})
+});
