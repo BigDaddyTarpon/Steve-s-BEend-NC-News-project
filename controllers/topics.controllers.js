@@ -6,9 +6,14 @@ const {
   selectArticles,
   insertCommentByArticleId,
 
+  removeCommentById,
+  checkCommentExists,
+
+
   adjustVotes,
 
   selectAllUsers,
+
 
 } = require("../models/topics.models");
 
@@ -82,6 +87,18 @@ exports.getCommentsByArticleId = (req, res, next) => {
 };
 
 
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  checkCommentExists(comment_id)
+    .then(() => {
+      return removeCommentById(comment_id);
+    })
+    .then((rows) => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+
+
 exports.incrementVotesByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
@@ -105,6 +122,7 @@ exports.getAllUsers = (req, res, next) => {
     })
 
     .catch((err) => {
+
 
       next(err);
     });

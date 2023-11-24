@@ -8,9 +8,13 @@ const {
   getCommentsByArticleId,
   addCommentbyArticleID,
 
+  deleteCommentById,
+
+
   incrementVotesByArticleId,
 
   getAllUsers,
+
 
 } = require("./controllers/topics.controllers");
 const {
@@ -29,6 +33,9 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
 app.get("/api", getEndpoints);
+app.delete("/api/comments/:comment_id", deleteCommentById)
+
+
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 

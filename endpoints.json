@@ -57,6 +57,12 @@
       ]
     }
   },
+
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes asingle comments by the comment_id",
+    "queries": [],
+    "exampleResponse": {}
+
   "GET /api/users": {
     "description": "serves all comments on an article by the article_id",
     "queries": [],
@@ -82,5 +88,6 @@
         "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
       }
     ]
+
   }
 }

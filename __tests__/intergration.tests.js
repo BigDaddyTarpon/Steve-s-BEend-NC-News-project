@@ -290,6 +290,29 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
+
+describe("/api/comments/:comment_id", () => {
+  test("DELETE: 204 removes a comment by the comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then((response) => {
+        expect(response.body.message).toBe(undefined);
+        expect(response.body).toEqual({});
+      });
+  });
+  test("DELETE:404 returns error code and message when id is valid but doesnt exist", () => {
+    return request(app)
+      .delete("/api/comments/999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+  test("DELETE:400 returns error code and message when id is invalid", () => {
+    return request(app)
+      .delete("/api/comments/banana")
+
 describe("/api/articles/:article_id", () => {
   test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
     return request(app)
@@ -328,11 +351,17 @@ describe("/api/articles/:article_id", () => {
     return request(app)
       .patch("/api/articles/banana")
       .send({ inc_votes: 5555 })
+
       .expect(400)
       .then((response) => {
         expect(response.body.message).toBe("Bad Request");
       });
   });
+
+  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1&2")
+
   test("should return 404 when given avalid but nonexistent article_id", () => {
     return request(app)
       .patch("/api/articles/999")
@@ -346,11 +375,15 @@ describe("/api/articles/:article_id", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({ })
+
       .expect(400)
       .then((response) => {
         expect(response.body.message).toBe("Bad Request");
       });
   });
+
+});
+
 
 })
 
@@ -392,4 +425,5 @@ describe("GET /api/users", () => {
       });
   });
 });
+
 
