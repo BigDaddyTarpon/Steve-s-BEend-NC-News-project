@@ -359,9 +359,15 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-  // test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
-  //   return request(app)
-  //     .delete("/api/comments/1&2")
+  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1&2")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+
 
   test("should return 404 when given avalid but nonexistent article_id", () => {
     return request(app)
