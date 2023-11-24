@@ -96,8 +96,8 @@ exports.deleteCommentById = (req, res, next) => {
     .then((rows) => {
       res.status(204).send();
     })
-    .catch((err) => {
-
+    .catch((err) => {next(err)})
+}
 
 exports.incrementVotesByArticleId = (req, res, next) => {
   const { article_id } = req.params;
@@ -126,4 +126,4 @@ exports.getAllUsers = (req, res, next) => {
 
       next(err);
     });
-};
+}

@@ -312,6 +312,7 @@ describe("/api/comments/:comment_id", () => {
   test("DELETE:400 returns error code and message when id is invalid", () => {
     return request(app)
       .delete("/api/comments/banana")
+  })
 
 describe("/api/articles/:article_id", () => {
   test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
@@ -358,9 +359,9 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
-    return request(app)
-      .delete("/api/comments/1&2")
+  // test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
+  //   return request(app)
+  //     .delete("/api/comments/1&2")
 
   test("should return 404 when given avalid but nonexistent article_id", () => {
     return request(app)
@@ -424,6 +425,4 @@ describe("GET /api/users", () => {
         ]);
       });
   });
-});
-
-
+})

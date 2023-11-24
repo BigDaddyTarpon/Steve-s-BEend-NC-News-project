@@ -85,6 +85,7 @@ exports.checkCommentExists = (comment_id) => {
       }
       return rows;
     });
+  }
 
 exports.adjustVotes = (article_id, inc_votes) => {
   return db
