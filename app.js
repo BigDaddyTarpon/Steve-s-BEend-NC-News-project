@@ -7,6 +7,7 @@ const {
   getEndpoints,
   getCommentsByArticleId,
   addCommentbyArticleID,
+  deleteCommentById,
 } = require("./controllers/topics.controllers");
 const {
   handle404,
@@ -23,6 +24,9 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
 app.get("/api", getEndpoints);
+app.delete("/api/comments/:comment_id", deleteCommentById)
+
+
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 

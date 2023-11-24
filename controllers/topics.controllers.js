@@ -5,6 +5,8 @@ const {
   selectCommentsById,
   selectArticles,
   insertCommentByArticleId,
+  removeCommentById,
+  checkCommentExists,
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -71,6 +73,26 @@ exports.getCommentsByArticleId = (req, res, next) => {
       res.status(200).send({ comments: rows });
     })
 
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  checkCommentExists(comment_id)
+    .then(() => {
+      return removeCommentById(comment_id);
+    })
+    .then((rows) => {
+      if (rows.length === 1) {
+        res.status(204).send({ message: "Error Check" });
+      } else {
+        res
+          .status(207)
+          .send({ message: "multiple deletes detected", deleted: rows });
+      }
+    })
     .catch((err) => {
       next(err);
     });
