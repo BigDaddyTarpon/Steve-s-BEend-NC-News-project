@@ -5,7 +5,11 @@ const {
   selectCommentsById,
   selectArticles,
   insertCommentByArticleId,
+
   adjustVotes,
+
+  selectAllUsers,
+
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -77,6 +81,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
     });
 };
 
+
 exports.incrementVotesByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
@@ -92,6 +97,15 @@ exports.incrementVotesByArticleId = (req, res, next) => {
   
     .catch((err) => { 
       
+
+exports.getAllUsers = (req, res, next) => {
+  selectAllUsers()
+    .then((users) => {
+      res.status(200).send(users);
+    })
+
+    .catch((err) => {
+
       next(err);
     });
 };

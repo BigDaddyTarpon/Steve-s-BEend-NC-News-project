@@ -64,6 +64,7 @@ exports.insertCommentByArticleId = (body, username, article_id) => {
       return rows[0];
     });
 };
+
 exports.adjustVotes = (article_id, inc_votes) => {
   return db
     .query(
@@ -81,4 +82,10 @@ exports.adjustVotes = (article_id, inc_votes) => {
     next(err)
       
     });
+
+exports.selectAllUsers = () => {
+  return db.query("SELECT * FROM users;").then(({ rows }) => {
+    return rows;
+  });
+
 };
