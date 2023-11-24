@@ -341,4 +341,15 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.message).toBe("Not Found");
       });
   });
-});
+  test("should return 400 when request body has no inc_votes property", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+
+})
+

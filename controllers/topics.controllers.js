@@ -80,15 +80,18 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.incrementVotesByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
-  // use article by id to check it exists, again
+    
   selectArticlesById(article_id)
-    .then(() => {
-      return adjustVotes(article_id, inc_votes);
-    })
+  .then(() => {
+    if(!inc_votes){return Promise.reject({ status: 400, message: "Bad Request" })}
+    return adjustVotes(article_id, inc_votes);
+  })
     .then((updatedArticle) => {
       res.status(202).send({ updatedArticle });
     })
-    .catch((err) => {
+  
+    .catch((err) => { 
+      
       next(err);
     });
 };
