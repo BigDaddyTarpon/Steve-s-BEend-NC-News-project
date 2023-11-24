@@ -96,7 +96,7 @@ exports.incrementVotesByArticleId = (req, res, next) => {
     })
   
     .catch((err) => { 
-      
+      next(err)})}
 
 exports.getAllUsers = (req, res, next) => {
   selectAllUsers()

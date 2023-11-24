@@ -33,7 +33,7 @@ app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.patch("/api/articles/:article_id", incrementVotesByArticleId);
-=======
+
 app.get("/api/users", getAllUsers)
 
 

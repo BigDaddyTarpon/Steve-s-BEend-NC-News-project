@@ -79,9 +79,9 @@ exports.adjustVotes = (article_id, inc_votes) => {
       return rows;
     })
     .catch((err) => {
-    next(err)
-      
-    });
+    next(err)})
+    }
+
 
 exports.selectAllUsers = () => {
   return db.query("SELECT * FROM users;").then(({ rows }) => {
