@@ -286,40 +286,38 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-describe("/api/comments/:comment_id", ()=>{
-  test("DELETE: 204 removes a comment by the comment_id", ()=>{
+describe("/api/comments/:comment_id", () => {
+  test("DELETE: 204 removes a comment by the comment_id", () => {
     return request(app)
-    .delete("/api/comments/1")
-    .expect(204)
-    .then((response) => {
-      expect(response.body.message).toBe(undefined);
-      expect(response.body).toEqual({})
-    });
-  })
+      .delete("/api/comments/1")
+      .expect(204)
+      .then((response) => {
+        expect(response.body.message).toBe(undefined);
+        expect(response.body).toEqual({});
+      });
+  });
   test("DELETE:404 returns error code and message when id is valid but doesnt exist", () => {
     return request(app)
-    .delete("/api/comments/999")
-    .expect(404)
-    .then((response) => {
-    expect(response.body.message).toBe("Not Found")})
-
-  })
+      .delete("/api/comments/999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
   test("DELETE:400 returns error code and message when id is invalid", () => {
     return request(app)
-    .delete("/api/comments/banana")
-    .expect(400)
-    .then((response) => {
-    expect(response.body.message).toBe("Bad Request")})
-
-  })
-  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", ()=>{
+      .delete("/api/comments/banana")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
     return request(app)
-    .delete("/api/comments/1&2")
-    .expect(400)
-    .then((response) => {
-      
-      expect(response.body.message).toBe("Bad Request");
-
-    });
-  })
-})
+      .delete("/api/comments/1&2")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+});

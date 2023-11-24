@@ -85,13 +85,7 @@ exports.deleteCommentById = (req, res, next) => {
       return removeCommentById(comment_id);
     })
     .then((rows) => {
-      if (rows.length === 1) {
-        res.status(204).send({ message: "Error Check" });
-      } else {
-        res
-          .status(207)
-          .send({ message: "multiple deletes detected", deleted: rows });
-      }
+      res.status(204).send();
     })
     .catch((err) => {
       next(err);
