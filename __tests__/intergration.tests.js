@@ -56,7 +56,7 @@ describe("non existent endpoint", () => {
   });
 });
 
-describe.only("/api/articles", () => {
+describe("/api/articles", () => {
   test("GET:200 returns status 200", () => {
     return request(app).get("/api/articles").expect(200);
   });
@@ -86,10 +86,16 @@ describe.only("/api/articles", () => {
       .get("/api/articles?topic=mitch")
       .expect(200)
       .then((response) => {
-        console.log(response.body, "response in test 89")
+        
         expect(response.body.articles.length).toBe(4)
-
-
+      })
+  })
+  test("GET:200 should return empty array when filtertopic is valid but does not exist", ()=>{
+    return request(app)
+      .get("/api/articles?topic=banana")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles.length).toBe(0)
       })
   })
 });
