@@ -5,7 +5,11 @@ const {
   selectCommentsById,
   selectArticles,
   insertCommentByArticleId,
+
+  adjustVotes,
+
   selectAllUsers,
+
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -77,6 +81,23 @@ exports.getCommentsByArticleId = (req, res, next) => {
     });
 };
 
+
+exports.incrementVotesByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+    
+  selectArticlesById(article_id)
+  .then(() => {
+    if(!inc_votes){return Promise.reject({ status: 400, message: "Bad Request" })}
+    return adjustVotes(article_id, inc_votes);
+  })
+    .then((updatedArticle) => {
+      res.status(202).send({ updatedArticle });
+    })
+  
+    .catch((err) => { 
+      
+
 exports.getAllUsers = (req, res, next) => {
   selectAllUsers()
     .then((users) => {
@@ -84,6 +105,7 @@ exports.getAllUsers = (req, res, next) => {
     })
 
     .catch((err) => {
+
       next(err);
     });
 };
