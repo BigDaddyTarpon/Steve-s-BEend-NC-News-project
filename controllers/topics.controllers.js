@@ -9,12 +9,9 @@ const {
   removeCommentById,
   checkCommentExists,
 
-
   adjustVotes,
 
   selectAllUsers,
-
-
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -86,7 +83,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
     });
 };
 
-
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;
   checkCommentExists(comment_id)
@@ -96,24 +92,30 @@ exports.deleteCommentById = (req, res, next) => {
     .then((rows) => {
       res.status(204).send();
     })
-    .catch((err) => {next(err)})
-}
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.incrementVotesByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
-    
+
   selectArticlesById(article_id)
-  .then(() => {
-    if(!inc_votes){return Promise.reject({ status: 400, message: "Bad Request" })}
-    return adjustVotes(article_id, inc_votes);
-  })
+    .then(() => {
+      if (!inc_votes) {
+        return Promise.reject({ status: 400, message: "Bad Request" });
+      }
+      return adjustVotes(article_id, inc_votes);
+    })
     .then((updatedArticle) => {
       res.status(202).send({ updatedArticle });
     })
-  
-    .catch((err) => { 
-      next(err)})}
+
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.getAllUsers = (req, res, next) => {
   selectAllUsers()
@@ -122,8 +124,6 @@ exports.getAllUsers = (req, res, next) => {
     })
 
     .catch((err) => {
-
-
       next(err);
     });
-}
+};
