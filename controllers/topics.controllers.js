@@ -5,6 +5,7 @@ const {
   selectCommentsById,
   selectArticles,
   insertCommentByArticleId,
+  selectAllUsers,
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -69,6 +70,17 @@ exports.getCommentsByArticleId = (req, res, next) => {
     })
     .then((rows) => {
       res.status(200).send({ comments: rows });
+    })
+
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getAllUsers = (req, res, next) => {
+  selectAllUsers()
+    .then((users) => {
+      res.status(200).send(users);
     })
 
     .catch((err) => {
