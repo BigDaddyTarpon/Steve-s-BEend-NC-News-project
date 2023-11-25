@@ -77,7 +77,6 @@ exports.selectArticlesById = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      console.log(rows, "rows model 120");
       return rows;
     });
 };
