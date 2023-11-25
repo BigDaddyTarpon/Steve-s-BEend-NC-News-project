@@ -81,13 +81,24 @@ describe("/api/articles", () => {
         }
       });
   });
-  test("GET:200 should accept optinal query for topics, and if present filter artiles by topic otherwise returnin all articles", ()=>{
+  test("GET:200 if optinal query for topics is present filter artiles by topic, otherwise returnin all articles", ()=>{
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)
       .then((response) => {
         
         expect(response.body.articles.length).toBe(4)
+      })
+  })
+  test("GET:200 filtered articles should all have correct topic property to match the filter", ()=>{
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        response.body.articles.forEach((article)=>{
+          expect(article.topic).toBe("mitch")
+
+        })
       })
   })
   test("GET:200 should return empty array when filtertopic is valid but does not exist", ()=>{
