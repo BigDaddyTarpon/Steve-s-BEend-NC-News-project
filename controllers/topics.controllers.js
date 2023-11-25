@@ -7,6 +7,7 @@ const {
   removeCommentById,
   checkCommentExists,
   checkArticleIdExists,
+  testValidQueryString,
   adjustVotes,
   selectAllUsers,
 } = require("../models/topics.models");
@@ -24,15 +25,18 @@ exports.getTopics = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const topic  = req.query.topic;
-  // const {topic, sort_by, order } = req.query;
-  // console.log(topic, sort_by, order, req.query, "cont 28")
-  //, sort_by=created_at, order=desc
-  selectArticles(topic)
+  const { topic } = req.query;
+  const sort_by = req.query.sort_by || "created_at";
+  const order = req.query.order || "desc";
+
+  
+      selectArticles(topic, sort_by, order)
+   
     .then((articles) => {
       res.status(200).send({ articles });
     })
     .catch((err) => {
+      console.log(err, "err in controllers 41")
       next(err);
     });
 };

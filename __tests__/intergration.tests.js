@@ -56,7 +56,7 @@ describe("GET non existent endpoint", () => {
   });
 });
 
-describe("GET /api/articles", () => {
+describe.only("GET /api/articles", () => {
   test("GET:200 returns status 200", () => {
     return request(app).get("/api/articles").expect(200);
   });
@@ -119,6 +119,61 @@ describe("GET /api/articles", () => {
         expect(response.body.articles).toBeSortedBy("created_at", {
           descending: true,
         });
+      });
+  });
+
+  test("GET: 200 has optional sort_by query which returns articles sorted by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+.expect(200)
+      .then((response) => {
+  
+        expect(response.body.articles).toBeSortedBy(response.body.articles.title)
+      });
+  });
+
+  test("GET: 200 has optional order query with a default desc which returns articles sorted in order", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=author&order=asc")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles).toBeSortedBy(response.body.articles.title)
+      });
+  });
+
+  test("GET: 400 if order query is invalid returns 404 and error message", () => {
+    return request(app)
+      .get("/api/articles?order=banana")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request")
+      });
+  });
+
+  test("GET: 400 if given a valid topic with order query that is invalid returns 404 and error message", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&order=banana")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request")
+      });
+  });
+
+  test("GET: 400 if search_by query is invalid returns 404 and error message", () => {
+    return request(app)
+      .get("/api/articles?sort_by=banana")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request")
+      });
+  });
+
+  test("GET: 400 if given a valid topic with search_by query that is invalid returns 400 and error message", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=banana")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request")
       });
   });
 });
