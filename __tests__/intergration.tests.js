@@ -56,8 +56,8 @@ describe("GET non existent endpoint", () => {
   });
 });
 
-describe.only("GET /api/articles", () => {
-  test("GET:200 returns status 200", () => {
+describe("GET /api/articles", () => {
+  test("GET:200 returns status 200", () => {it 
     return request(app).get("/api/articles").expect(200);
   });
 
