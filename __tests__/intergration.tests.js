@@ -184,99 +184,6 @@ describe("GET /api", () => {
   });
 });
 
-describe("POST /api/articles/:article_id/comments", () => {
-  test("POST: 201 accepts an object with username and body, returns the posted comment", () => {
-    return request(app)
-      .post("/api/articles/1/comments")
-      .send({
-        body: "testing, testing, 123!",
-        username: "butter_bridge",
-      })
-      .expect(201)
-      .then((response) => {
-        expect(response.body.comment).toMatchObject({
-          comment_id: 19,
-          votes: 0,
-          created_at: expect.any(String),
-          author: "butter_bridge",
-          body: "testing, testing, 123!",
-          article_id: 1,
-        });
-      });
-  });
-
-  test("POST: 201 accepts an object with username and body, ignores additional elemnets on the body and returns the correctly posted comment", () => {
-    return request(app)
-      .post("/api/articles/1/comments")
-      .send({
-        body: "testing, testing, 123!",
-        bananas: "banana",
-        username: "butter_bridge",
-      })
-      .expect(201)
-      .then((response) => {
-        expect(response.body.comment).toMatchObject({
-          comment_id: 19,
-          votes: 0,
-          created_at: expect.any(String),
-          author: "butter_bridge",
-          body: "testing, testing, 123!",
-          article_id: 1,
-        });
-      });
-  });
-
-  test("POST:400 should return Bad Request for missing input fields", () => {
-    return request(app)
-      .post("/api/articles/1/comments")
-      .send({})
-
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
-  });
-
-  test("POST:404 should return Not Found for invalid author field", () => {
-    return request(app)
-      .post("/api/articles/1/comments")
-      .send({
-        body: "testing, testing, 123!",
-        username: "Elusive",
-      })
-      .expect(404)
-      .then((response) => {
-        expect(response.body.message).toBe("Not Found");
-      });
-  });
-
-  test("POST:400 should return Bad Request for invalid article id input", () => {
-    return request(app)
-      .post("/api/articles/banana/comments")
-      .send({
-        body: "testing, testing, 123!",
-        username: "butter_bridge",
-      })
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
-  });
-
-  test("POST:404 should return Not Found if valid but not existing article_id", () => {
-    return request(app)
-      .post("/api/articles/999/comments")
-      .send({
-        body: "testing, testing, 123!",
-        username: "butter_bridge",
-      })
-      .expect(404)
-      .then((response) => {
-        expect(response.body.message).toBe("Not Found");
-      });
-  });
-});
-
 describe("GET /api/articles/:article_id/comments", () => {
   test("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
     return request(app)
@@ -335,6 +242,136 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(response.body.message).toBe("Bad Request");
       });
   });
+});
+
+describe("GET /api/users", () => {
+  test("GET:200 should return an array of all correct length containing all the users, where each user object has the correct properties", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.length).toBe(4);
+        expect(response.body).toEqual([
+          {
+            username: "butter_bridge",
+            name: "jonny",
+            avatar_url:
+              "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+          },
+          {
+            username: "icellusedkars",
+            name: "sam",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+          },
+          {
+            username: "rogersop",
+            name: "paul",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+          },
+          {
+            username: "lurker",
+            name: "do_nothing",
+            avatar_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          },
+        ]);
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("POST: 201 accepts an object with username and body, returns the posted comment", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        body: "testing, testing, 123!",
+        username: "butter_bridge",
+      })
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment).toMatchObject({
+          comment_id: 19,
+          votes: 0,
+          created_at: expect.any(String),
+          author: "butter_bridge",
+          body: "testing, testing, 123!",
+          article_id: 1,
+        });
+      });
+  });
+
+  test("POST: 201 accepts an object with username and body, ignores additional elemnets on the body and returns the correctly posted comment", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        body: "testing, testing, 123!",
+        bananas: "banana",
+        username: "butter_bridge",
+      })
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment).toMatchObject({
+          comment_id: 19,
+          votes: 0,
+          created_at: expect.any(String),
+          author: "butter_bridge",
+          body: "testing, testing, 123!",
+          article_id: 1,
+        });
+      });
+  });
+});
+
+test("POST:400 should return Bad Request for missing input fields", () => {
+  return request(app)
+    .post("/api/articles/1/comments")
+    .send({})
+
+    .expect(400)
+    .then((response) => {
+      expect(response.body.message).toBe("Bad Request");
+    });
+});
+
+test("POST:404 should return Not Found for invalid author field", () => {
+  return request(app)
+    .post("/api/articles/1/comments")
+    .send({
+      body: "testing, testing, 123!",
+      username: "Elusive",
+    })
+    .expect(404)
+    .then((response) => {
+      expect(response.body.message).toBe("Not Found");
+    });
+});
+
+test("POST:400 should return Bad Request for invalid article id input", () => {
+  return request(app)
+    .post("/api/articles/banana/comments")
+    .send({
+      body: "testing, testing, 123!",
+      username: "butter_bridge",
+    })
+    .expect(400)
+    .then((response) => {
+      expect(response.body.message).toBe("Bad Request");
+    });
+});
+
+test("POST:404 should return Not Found if valid but not existing article_id", () => {
+  return request(app)
+    .post("/api/articles/999/comments")
+    .send({
+      body: "testing, testing, 123!",
+      username: "butter_bridge",
+    })
+    .expect(404)
+    .then((response) => {
+      expect(response.body.message).toBe("Not Found");
+    });
 });
 
 describe("DELETE /api/comments/:comment_id", () => {
@@ -435,43 +472,6 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.message).toBe("Bad Request");
-      });
-  });
-});
-
-describe("GET /api/users", () => {
-  test("GET:200 should return an array of all correct length containing all the users, where each user object has the correct properties", () => {
-    return request(app)
-      .get("/api/users")
-      .expect(200)
-      .then((response) => {
-        expect(response.body.length).toBe(4);
-        expect(response.body).toEqual([
-          {
-            username: "butter_bridge",
-            name: "jonny",
-            avatar_url:
-              "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
-          },
-          {
-            username: "icellusedkars",
-            name: "sam",
-            avatar_url:
-              "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
-          },
-          {
-            username: "rogersop",
-            name: "paul",
-            avatar_url:
-              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
-          },
-          {
-            username: "lurker",
-            name: "do_nothing",
-            avatar_url:
-              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-          },
-        ]);
       });
   });
 });
