@@ -125,10 +125,11 @@ describe.only("GET /api/articles", () => {
   test("GET: 200 has optional sort_by query which returns articles sorted by query", () => {
     return request(app)
       .get("/api/articles?sort_by=title")
-.expect(200)
+      .expect(200)
       .then((response) => {
-  
-        expect(response.body.articles).toBeSortedBy(response.body.articles.title)
+        expect(response.body.articles).toBeSortedBy(
+          response.body.articles.title
+        );
       });
   });
 
@@ -137,7 +138,9 @@ describe.only("GET /api/articles", () => {
       .get("/api/articles?topic=mitch&sort_by=author&order=asc")
       .expect(200)
       .then((response) => {
-        expect(response.body.articles).toBeSortedBy(response.body.articles.title)
+        expect(response.body.articles).toBeSortedBy(
+          response.body.articles.title
+        );
       });
   });
 
@@ -146,7 +149,7 @@ describe.only("GET /api/articles", () => {
       .get("/api/articles?order=banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.message).toBe("Bad Request")
+        expect(response.body.message).toBe("Bad Request");
       });
   });
 
@@ -155,7 +158,7 @@ describe.only("GET /api/articles", () => {
       .get("/api/articles?topic=mitch&order=banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.message).toBe("Bad Request")
+        expect(response.body.message).toBe("Bad Request");
       });
   });
 
@@ -164,7 +167,7 @@ describe.only("GET /api/articles", () => {
       .get("/api/articles?sort_by=banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.message).toBe("Bad Request")
+        expect(response.body.message).toBe("Bad Request");
       });
   });
 
@@ -173,7 +176,7 @@ describe.only("GET /api/articles", () => {
       .get("/api/articles?topic=mitch&sort_by=banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.message).toBe("Bad Request")
+        expect(response.body.message).toBe("Bad Request");
       });
   });
 });

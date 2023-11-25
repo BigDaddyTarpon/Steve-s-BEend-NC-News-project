@@ -7,7 +7,6 @@ const {
   removeCommentById,
   checkCommentExists,
   checkArticleIdExists,
-  testValidQueryString,
   adjustVotes,
   selectAllUsers,
 } = require("../models/topics.models");
@@ -29,14 +28,11 @@ exports.getArticles = (req, res, next) => {
   const sort_by = req.query.sort_by || "created_at";
   const order = req.query.order || "desc";
 
-  
-      selectArticles(topic, sort_by, order)
-   
+  selectArticles(topic, sort_by, order)
     .then((articles) => {
       res.status(200).send({ articles });
     })
     .catch((err) => {
-      console.log(err, "err in controllers 41")
       next(err);
     });
 };

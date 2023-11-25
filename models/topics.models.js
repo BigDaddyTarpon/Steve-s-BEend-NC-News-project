@@ -8,7 +8,6 @@ exports.selectTopics = () => {
 
 exports.selectArticles = (topic, sort_by, order) => {
   let queryArray = [];
-  //console.log(topic, sort_by, order, "models11");
 
   let queryString = `SELECT 
   articles.article_id, 
@@ -22,8 +21,6 @@ exports.selectArticles = (topic, sort_by, order) => {
   FROM articles
   JOIN comments ON articles.article_id = comments.article_id`;
 
-  console.log(topic, sort_by, order,"model 25");
-
   if (
     ![
       "article_id",
@@ -35,11 +32,9 @@ exports.selectArticles = (topic, sort_by, order) => {
       "article_img_url",
     ].includes(sort_by)
   ) {
-    console.log("fail sort_by to reject");
     return Promise.reject({ status: 400, message: "Bad Request" });
   }
   if (!["asc", "desc"].includes(order)) {
-    console.log("fails order_by to reject");
     return Promise.reject({ status: 400, message: "Bad Request" });
   }
 
@@ -60,66 +55,6 @@ exports.selectArticles = (topic, sort_by, order) => {
       return articles.rows;
     });
   }
-};
-
-//test string gor psql WORKS!
-/*  SELECT 
-  articles.article_id, 
-  title,
-  topic,
-  articles.author,
-  articles.created_at,
-  articles.votes,
-  article_img_url, 
-  COUNT(comments.comment_id) AS comment_count
-  FROM articles
-  JOIN comments ON articles.article_id = comments.article_id
- WHERE articles.topic = 'mitch' GROUP BY articles.article_id
-   ORDER BY topic asc;
-
-
-
-
-  */
-//(if queryArray.length = 0 no array different query (return db.query(queryString).then((articles) => {
-//   return articles.rows;) --> only if not able to use sort-by in Array.)
-
-exports.testValidQueryString = (topic, sort_by, order) => {
-  return db
-    .query(`SELECT topic FROM articles;`)
-    .then(() => {
-      if (
-        ![
-          "article_id",
-          "title",
-          "topic",
-          "author",
-          "created_at",
-          "articles.votes",
-          "article_img_url",
-        ].includes(sort_by)
-      ) {
-        console.log("fail sort_by to reject");
-        return Promise.reject({ status: 400, message: "Bad Request" });
-      }
-      if (!["asc", "desc"].includes(order)) {
-        console.log("fails order_by to reject");
-        return Promise.reject({ status: 400, message: "Bad Request" });
-      }
-      // console.log(rows, "model 89")
-      // return { rows }
-    })
-    .then(({rows}) => {
-      console.log(rows, "rows model 92");
-      return rows;
-    })
-    .catch((err) => {
-      console.log(err, "err in testValidQueryString model 96");
-      next(err);
-    });
-
-  //working; SELECT articles.topic FROM articles WHERE article_id = 1 GROUP BY article_id;
-  // SELECT topic FROM articles WHERE article_id = 1 GROUP BY article_id;
 };
 
 exports.selectArticlesById = (article_id) => {
