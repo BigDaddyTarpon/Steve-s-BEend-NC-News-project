@@ -7,6 +7,9 @@ The back end project is built using javascript with express to access a PSQL dat
 The live version is hosted through the render service on this link; https://steves-nc-news-project.onrender.com
 
 # In order to make a local copy of the API.
+
+The minimum requirements are; 
+
 1. The first step is to clone the public repo from https://github.com/BigDaddyTarpon/Steve-s-BEend-NC-News-project
 
 2. Run npm i through the terminal to install dependencies. All dependencies used can be viewed in the package.json.
