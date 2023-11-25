@@ -1,17 +1,13 @@
-const { handlePSQLErrors } = require("../errorhandling");
 const {
   selectTopics,
   selectArticlesById,
   selectCommentsById,
   selectArticles,
   insertCommentByArticleId,
-
   removeCommentById,
   checkCommentExists,
   checkArticleIdExists,
-
   adjustVotes,
-
   selectAllUsers,
 } = require("../models/topics.models");
 
@@ -22,14 +18,13 @@ exports.getTopics = (req, res, next) => {
     .then((topics) => {
       res.status(200).send({ topics });
     })
-
     .catch((err) => {
       next(err);
     });
 };
 
 exports.getArticles = (req, res, next) => {
-  const topic = req.query.topic
+  const topic = req.query.topic;
   selectArticles(topic)
     .then((articles) => {
       res.status(200).send({ articles });
@@ -62,7 +57,6 @@ exports.addCommentbyArticleID = (req, res, next) => {
     .then((comment) => {
       res.status(201).send({ comment });
     })
-
     .catch((err) => {
       next(err);
     });
@@ -82,7 +76,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .then((rows) => {
       res.status(200).send({ comments: rows });
     })
-
     .catch((err) => {
       next(err);
     });
@@ -116,7 +109,6 @@ exports.incrementVotesByArticleId = (req, res, next) => {
     .then((updatedArticle) => {
       res.status(202).send({ updatedArticle });
     })
-
     .catch((err) => {
       next(err);
     });
@@ -127,7 +119,6 @@ exports.getAllUsers = (req, res, next) => {
     .then((users) => {
       res.status(200).send(users);
     })
-
     .catch((err) => {
       next(err);
     });

@@ -15,7 +15,6 @@ exports.selectArticles = (topic) => {
   articles.created_at,
   articles.votes,
   article_img_url, 
-  
   COUNT(comments.comment_id) AS comment_count
   FROM articles
   JOIN comments ON articles.article_id = comments.article_id`;
@@ -34,7 +33,6 @@ exports.selectArticles = (topic) => {
   }
 };
 
-
 exports.selectArticlesById = (article_id) => {
   return db
     .query(
@@ -47,9 +45,6 @@ exports.selectArticlesById = (article_id) => {
     articles.votes,
     article_img_url,
     articles.body,
-
-     
-    
     COUNT(comments.comment_id) AS comment_count
     FROM articles
     JOIN comments 
@@ -100,7 +95,6 @@ exports.checkArticleIdExists = (article_id) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, message: "Not Found" });
       }
-
       return rows;
     });
 };
@@ -122,7 +116,6 @@ exports.checkCommentExists = (comment_id) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, message: "Not Found" });
       }
-
       return rows;
     });
 };

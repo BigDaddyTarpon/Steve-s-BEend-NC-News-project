@@ -7,15 +7,9 @@ const {
   getEndpoints,
   getCommentsByArticleId,
   addCommentbyArticleID,
-
   deleteCommentById,
-
-
   incrementVotesByArticleId,
-
   getAllUsers,
-
-
 } = require("./controllers/topics.controllers");
 const {
   handle404,
@@ -28,24 +22,24 @@ const app = express();
 app.use(express.json());
 
 
-app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
 app.get("/api", getEndpoints);
-app.delete("/api/comments/:comment_id", deleteCommentById)
-
-
-
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+app.get("/api/users", getAllUsers)
+
+
+app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
 
 app.patch("/api/articles/:article_id", incrementVotesByArticleId);
 
-app.get("/api/users", getAllUsers)
+app.delete("/api/comments/:comment_id", deleteCommentById)
 
 
 app.use(handlePSQLError);
 app.use(handleCustomError);
 app.use(handleInternalServerError);
 app.all("/*", handle404);
+
 module.exports = app;
