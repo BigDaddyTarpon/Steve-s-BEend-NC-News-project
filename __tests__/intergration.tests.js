@@ -142,6 +142,14 @@ describe("/api/articles/:article_id", () => {
         expect(typeof response.body.articles[0].article_img_url).toBe("string");
       });
   });
+  test.only("should now have comment count property", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles[0].comment_count).toBe("11");
+      });
+  });
 });
 test("GET: 400 returns error code and message when id is not valid", () => {
   return request(app)
@@ -340,6 +348,7 @@ describe("/api/comments/:comment_id", () => {
   test("DELETE:400 returns error code and message when id is invalid", () => {
     return request(app).delete("/api/comments/banana");
   });
+});
 
   describe("/api/articles/:article_id", () => {
     test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
@@ -386,34 +395,33 @@ describe("/api/comments/:comment_id", () => {
         });
     });
 
-    test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
-      return request(app)
-        .delete("/api/comments/1&2")
-        .expect(400)
-        .then((response) => {
-          expect(response.body.message).toBe("Bad Request");
-        });
-    });
+  test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1&2")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
 
-    test("should return 404 when given avalid but nonexistent article_id", () => {
-      return request(app)
-        .patch("/api/articles/999")
-        .send({ inc_votes: 5555 })
-        .expect(404)
-        .then((response) => {
-          expect(response.body.message).toBe("Not Found");
-        });
-    });
-    test("should return 400 when request body has no inc_votes property", () => {
-      return request(app)
-        .patch("/api/articles/1")
-        .send({})
+  test("PATCH: 404 should return 404 when given a valid but nonexistent article_id", () => {
+    return request(app)
+      .patch("/api/articles/9999")
+      .send({ inc_votes: 5555 })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+  test("should return 400 when request body has no inc_votes property", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({})
 
-        .expect(400)
-        .then((response) => {
-          expect(response.body.message).toBe("Bad Request");
-        });
-    });
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
   });
 });
 
