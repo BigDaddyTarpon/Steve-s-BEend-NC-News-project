@@ -142,7 +142,7 @@ describe("/api/articles/:article_id", () => {
         expect(typeof response.body.articles[0].article_img_url).toBe("string");
       });
   });
-  test.only("should now have comment count property", () => {
+  test("should now have comment count property", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
