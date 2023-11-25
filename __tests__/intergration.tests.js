@@ -271,14 +271,15 @@ describe("/api/articles/:article_id/comments", () => {
         );
       });
   });
-  // //test("GET:404 returns a status 400, returns empty, but not an error when id provied no comments", () => {
-  //   return request(app)
-  //     .get("/api/articles/2/comments")
-  //     .expect(404)
-  //     //.then((response) => {
-  //       expect(response.body.comments.length).toBe(0);
-  //    // });
-  // });
+  test("GET:200 returns a status 200, returns empty, but not an error when id provied no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments.length).toBe(0);
+     });
+    });
+  
 
   test("GET: 404 returns error code and message when id is valid but doesnt exist", () => {
     return request(app)
@@ -296,7 +297,7 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.message).toBe("Bad Request");
       });
   });
-  
+})
 
 describe("/api/comments/:comment_id", () => {
   test("DELETE: 204 removes a comment by the comment_id", () => {
@@ -319,6 +320,8 @@ describe("/api/comments/:comment_id", () => {
   test("DELETE:400 returns error code and message when id is invalid", () => {
     return request(app).delete("/api/comments/banana");
   });
+})
+  
 
   describe("/api/articles/:article_id", () => {
     test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
@@ -374,9 +377,9 @@ describe("/api/comments/:comment_id", () => {
         });
     });
 
-    test("should return 404 when given avalid but nonexistent article_id", () => {
+    test("PATCH: 404 should return 404 when given a valid but nonexistent article_id", () => {
       return request(app)
-        .patch("/api/articles/999")
+        .patch("/api/articles/9999")
         .send({ inc_votes: 5555 })
         .expect(404)
         .then((response) => {
@@ -394,7 +397,7 @@ describe("/api/comments/:comment_id", () => {
         });
     });
   });
-});
+
 
 describe("GET /api/users", () => {
   test("should return an array of all correct length containing all the users, where each user object has the correct properties", () => {
@@ -430,4 +433,4 @@ describe("GET /api/users", () => {
           },
         ]);
       });
-  })})})
+  })})

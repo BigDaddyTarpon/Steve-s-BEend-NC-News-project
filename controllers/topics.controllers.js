@@ -8,6 +8,7 @@ const {
 
   removeCommentById,
   checkCommentExists,
+  checkArticleIdExists,
 
   adjustVotes,
 
@@ -39,8 +40,11 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticlesById = (req, res, next) => {
   const { article_id } = req.params;
-
-  selectArticlesById(article_id)
+  
+  checkArticleIdExists(article_id)
+  .then(()=>{
+  return selectArticlesById(article_id)
+})
     .then((articles) => {
       res.status(200).send({ articles });
     })
@@ -70,7 +74,7 @@ exports.getEndpoints = (req, res) => {
 exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
 
-  selectArticlesById(article_id)
+  checkArticleIdExists(article_id)
     .then(() => {
       return selectCommentsById(article_id);
     })
@@ -101,7 +105,7 @@ exports.incrementVotesByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
-  selectArticlesById(article_id)
+  checkArticleIdExists(article_id)
     .then(() => {
       if (!inc_votes) {
         return Promise.reject({ status: 400, message: "Bad Request" });
