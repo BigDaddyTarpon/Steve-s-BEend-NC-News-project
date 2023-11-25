@@ -52,9 +52,8 @@ exports.selectArticlesById = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-    
       return rows;
-   });
+    });
 };
 
 exports.selectCommentsById = (article_id) => {
@@ -82,24 +81,23 @@ exports.insertCommentByArticleId = (body, username, article_id) => {
     });
 };
 
-exports.checkArticleIdExists = (article_id) =>{
- 
+exports.checkArticleIdExists = (article_id) => {
   return db
-  .query(
-    `SELECT 
+    .query(
+      `SELECT 
     articles.article_id 
     FROM articles
-    WHERE articles.article_id = $1`, [article_id])
+    WHERE articles.article_id = $1`,
+      [article_id]
+    )
     .then(({ rows }) => {
-      
       if (rows.length === 0) {
-        
         return Promise.reject({ status: 404, message: "Not Found" });
       }
-      
+
       return rows;
     });
-}
+};
 
 exports.removeCommentById = (comment_id) => {
   return db
@@ -118,17 +116,10 @@ exports.checkCommentExists = (comment_id) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, message: "Not Found" });
       }
-      
+
       return rows;
-     
-    })
-    
-     
-  
-  
+    });
 };
-
-
 
 exports.adjustVotes = (article_id, inc_votes) => {
   return db
