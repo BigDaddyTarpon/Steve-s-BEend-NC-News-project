@@ -281,11 +281,64 @@ describe("POST /api/articles", () => {
       })
       .expect(201)
       .then((response) => {
-        console.log(response.body, "test 285");
+        expect(response.body.articles[0]).toMatchObject({
+          article_id: 14,
+          title: "mitch got a new cat",
+          topic: "cats",
+          author: "butter_bridge",
+          created_at: expect.any(String),
+          votes: 0,
+          article_img_url:
+            "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+          body: "he caught a big one",
+          comment_count: "0",
+        });
+      });
+  });
+
+  test("POST 400 returns error message when any of the fields are missing", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({})
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+
+  test("POST 404 returns error message when the topic field is not a permitted value", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "butter_bridge",
+        title: "mitch got a new cat",
+        body: "he caught a big one",
+        topic: "fishing",
+        article_img_url:
+          "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+  test("POST 404 returns error message when the author field is not a permitted value", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "sneaky",
+        title: "mitch got a new cat",
+        body: "he caught a big one",
+        topic: "cats",
+        article_img_url:
+          "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
       });
   });
 });
-//nb topics limited field
 
 describe("GET /api/articles/:article_id/comments", () => {
   test("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {

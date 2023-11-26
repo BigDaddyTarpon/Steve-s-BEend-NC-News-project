@@ -126,24 +126,25 @@ exports.getAllUsers = (req, res, next) => {
 };
 
 exports.addArticle = (req, res, next) => {
-  const { author, title, body, topic, article_img_url } = req.body;
+  let { author, title, body, topic, article_img_url } = req.body;
   if (!article_img_url) {
     article_img_url = "https://northcoders.com/";
   }
+  
 
   insertArticle(author, title, body, topic, article_img_url)
     .then((insertedArticle) => {
       const { article_id } = insertedArticle[0];
-      console.log(insertedArticle, article_id, "<<< at 137 cont)");
 
       return selectArticlesById(article_id);
     })
     .then((articles) => {
-      console.log(articles, "142 cont");
+      
       res.status(201).send({ articles });
     })
-    
+
     .catch((err) => {
-      console.log(err, "err in control 142");
+      next(err);
     });
 };
+
