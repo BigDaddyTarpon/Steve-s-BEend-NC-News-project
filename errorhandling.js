@@ -20,6 +20,6 @@ exports.handleCustomError = (err, req, res, next) => {
 };
 
 exports.handleInternalServerError = (err, req, res, next) => {
-  //console.log(err, "<<<<<<<<<<<<<<<<<<err in 500");
+  console.log(err, "<<<<<<<<<<<<<<<<<<err in 500");
   res.status(500).send(err);
 };

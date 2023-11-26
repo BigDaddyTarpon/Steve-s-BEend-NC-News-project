@@ -9,6 +9,7 @@ const {
   addCommentbyArticleID,
   deleteCommentById,
   incrementVotesByArticleId,
+  incrementVotesByCommentId,
   getAllUsers,
 } = require("./controllers/topics.controllers");
 const {
@@ -33,8 +34,9 @@ app.get("/api/users", getAllUsers)
 app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
 
 app.patch("/api/articles/:article_id", incrementVotesByArticleId);
+app.patch("/api/comments/:comment_id", incrementVotesByCommentId);
 
-app.delete("/api/comments/:comment_id", deleteCommentById)
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 
 app.use(handlePSQLError);
