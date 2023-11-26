@@ -152,14 +152,5 @@ exports.adjustCommentVotes = (comment_id, inc_votes) => {
     )
     .then(({ rows }) => {
       return rows;
-    })
-    // .catch((err) => {console.log(err, "model 156");
-    //   next(err);
-    // });
+    });
 };
-
-/* 
-working;
-UPDATE comments SET votes = votes + 500 WHERE comment_id = 1 RETURNING *;
-
-*/

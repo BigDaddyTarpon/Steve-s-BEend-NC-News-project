@@ -410,7 +410,7 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.message).toBe("Not Found");
       });
   });
-  test("PATCH: 200 should return 400 when request body has no inc_votes property", () => {
+  test("PATCH: 400 should return 400 and error message when request body has no inc_votes property", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({})
@@ -422,14 +422,13 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe.only(" /api/comments/:comment_id", () => {
+describe(" /api/comments/:comment_id", () => {
   test("PATCH: 202 updates the votes on a comment by the comment_id then returns the updated comment with no other properties changed", () => {
     return request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: 500 })
       .expect(202)
       .then((response) => {
-        console.log(response.body.updatedComment[0], "model 435");
         expect(response.body.updatedComment[0]).toEqual({
           comment_id: 1,
           body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
@@ -438,6 +437,52 @@ describe.only(" /api/comments/:comment_id", () => {
           votes: 516,
           created_at: "2020-04-06T12:17:00.000Z",
         });
+      });
+  });
+
+  test("PATCH: 404 returns 404 and error message when the comment_id is valid but doesnt exist", () => {
+    return request(app)
+      .patch("/api/comments/999")
+      .send({ inc_votes: 5 })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+
+  test("PATCH: 400 returns 400 and error message when the comment_id is invalid", () => {
+    return request(app)
+      .patch(
+        "/api/comments/DELETE FROM comments WHERE comment_id = 1 RETURNING *;"
+      )
+      .send({ inc_votes: 5 })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+
+  test("PATCH: 400 should return 400 and error message when request body has no inc_votes property", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({})
+
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+
+  test("PATCH: 400 should return 400 and error message when request body has an inc_votes property which is not a number", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({
+        inc_votes: "DELETE FROM comments WHERE comment_id = 1 RETURNING *;",
+      })
+
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
       });
   });
 });

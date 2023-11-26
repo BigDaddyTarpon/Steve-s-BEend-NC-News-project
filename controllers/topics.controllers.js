@@ -125,26 +125,25 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
-exports.incrementVotesByCommentId = (req, res, next) =>{
-  const { comment_id } = req.params
-  const { inc_votes } = req.body
-//console.log(comment_id, inc_votes, req.params, "cont 129")
+exports.incrementVotesByCommentId = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
 
-// checkCommentExists(comment_id)
-// .then(() => {
+  if (Number(comment_id) === NaN) {
+    throw { status: 400, message: "Bad Request" };
+  }
 
-//   if (!inc_votes) {
-//     return Promise.reject({ status: 400, message: "Bad Request" });
-//   }
-//   return 
-  
-  adjustCommentVotes(comment_id, inc_votes)
-//})
-.then((updatedComment) => {
-  res.status(202).send({ updatedComment });
-})
-.catch((err) => {
-  console.log(err, "err in cont 144");
-  next(err);
-});
-}
+  checkCommentExists(comment_id)
+    .then(() => {
+      if (!inc_votes) {
+        return Promise.reject({ status: 400, message: "Bad Request" });
+      }
+      return adjustCommentVotes(comment_id, inc_votes);
+    })
+    .then((updatedComment) => {
+      res.status(202).send({ updatedComment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
