@@ -10,6 +10,7 @@ const {
   deleteCommentById,
   incrementVotesByArticleId,
   getAllUsers,
+  addArticle,
 } = require("./controllers/topics.controllers");
 const {
   handle404,
@@ -31,7 +32,7 @@ app.get("/api/users", getAllUsers)
 
 
 app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
-
+app.post("/api/articles", addArticle)
 app.patch("/api/articles/:article_id", incrementVotesByArticleId);
 
 app.delete("/api/comments/:comment_id", deleteCommentById)

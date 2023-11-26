@@ -143,3 +143,30 @@ exports.selectAllUsers = () => {
     return rows;
   });
 };
+
+exports.insertArticle = (author, title, body, topic, article_img_url)=>{
+  return db
+  .query(
+    `INSERT INTO articles(author, title, body, topic, article_img_url) 
+    VALUES ($1, $2, $3, $4, $5) 
+    RETURNING *
+    ;`,
+    [author, title, body, topic, article_img_url]
+
+    
+  )
+  .then(({ rows }) => {
+    return rows;
+  })
+}
+
+/*
+
+INSERT INTO articles(author, title, body, topic, article_img_url) 
+    VALUES ('butter_bridge', 'mitch went fishing', 'he caught a big one', 'cats', 'https://www.pexels.com/photo/nature-summer-yellow-animal-55814/') 
+    RETURNING *;
+
+   
+
+
+*/

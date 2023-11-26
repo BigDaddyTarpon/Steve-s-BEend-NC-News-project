@@ -60,7 +60,7 @@
   },
 
   "DELETE /api/comments/:comment_id": {
-    "description": "deletes asingle comments by the comment_id",
+    "description": "deletes a single comments by the comment_id",
     "queries": [],
     "exampleResponse": {}
   },

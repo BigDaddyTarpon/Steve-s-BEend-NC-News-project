@@ -9,6 +9,7 @@ const {
   checkArticleIdExists,
   adjustVotes,
   selectAllUsers,
+  insertArticle,
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -121,5 +122,29 @@ exports.getAllUsers = (req, res, next) => {
     })
     .catch((err) => {
       next(err);
+    });
+};
+
+exports.addArticle = (req, res, next) => {
+  const { author, title, body, topic, article_img_url } = req.body;
+  if (!article_img_url) {
+    article_img_url = "https://northcoders.com/";
+  }
+
+  insertArticle(author, title, body, topic, article_img_url)
+    .then((insertedArticle) => {
+      const { article_id } = insertedArticle[0];
+      console.log(insertedArticle, article_id, "135 cont)");
+    })
+    .then((article_id) => {
+      return selectArticlesById(article_id);
+    })
+
+    .then((completeFinalAtricle) => {
+      console.log(completeFinalAtricle, "<<<<<< finished article control 138");
+      res.status(201).send({ completeFinalAtricle });
+    })
+    .catch((err) => {
+      console.log(err, "err in control 142");
     });
 };
