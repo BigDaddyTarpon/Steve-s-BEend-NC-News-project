@@ -134,16 +134,15 @@ exports.addArticle = (req, res, next) => {
   insertArticle(author, title, body, topic, article_img_url)
     .then((insertedArticle) => {
       const { article_id } = insertedArticle[0];
-      console.log(insertedArticle, article_id, "135 cont)");
-    })
-    .then((article_id) => {
+      console.log(insertedArticle, article_id, "<<< at 137 cont)");
+
       return selectArticlesById(article_id);
     })
-
-    .then((completeFinalAtricle) => {
-      console.log(completeFinalAtricle, "<<<<<< finished article control 138");
-      res.status(201).send({ completeFinalAtricle });
+    .then((articles) => {
+      console.log(articles, "142 cont");
+      res.status(201).send({ articles });
     })
+    
     .catch((err) => {
       console.log(err, "err in control 142");
     });

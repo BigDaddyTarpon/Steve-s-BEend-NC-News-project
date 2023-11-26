@@ -267,8 +267,8 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("POST /api/articles", () => {
-  test("Post: 201 accepts an object with specific atricle properties, returns the complete posted article", () => {
+describe("POST /api/articles", () => {
+  test("Post: 201 accepts an object with specific article properties, returns the complete posted article", () => {
     return request(app)
       .post("/api/articles")
       .send({
@@ -281,7 +281,7 @@ describe.only("POST /api/articles", () => {
       })
       .expect(201)
       .then((response) => {
-        console.log(response, "test 285");
+        console.log(response.body, "test 285");
       });
   });
 });
