@@ -10,6 +10,7 @@ const {
   deleteCommentById,
   incrementVotesByArticleId,
   getAllUsers,
+  getUserName,
 } = require("./controllers/topics.controllers");
 const {
   handle404,
@@ -21,21 +22,19 @@ const {
 const app = express();
 app.use(express.json());
 
-
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
 app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
-app.get("/api/users", getAllUsers)
-
+app.get("/api/users", getAllUsers);
+app.get("/api/users/:username", getUserName)
 
 app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
 
 app.patch("/api/articles/:article_id", incrementVotesByArticleId);
 
-app.delete("/api/comments/:comment_id", deleteCommentById)
-
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.use(handlePSQLError);
 app.use(handleCustomError);
