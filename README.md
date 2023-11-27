@@ -1,14 +1,14 @@
 # Steve's BEnd Northcoders News Project
 
 # Northcoders News API Back End Project - introduction.
-This API is the back end project which is intended to work with the front end project to collectively produce a complete and functioning whole. It is designed to allow access to data programmatically.
-The back end project is built using javascript with express to access a PSQL database. Testing through Jest and Supertest has been used for Test Driven Development throughout, and Github has been used in a style to mimic a real world development work flow; working, tested code for one ticket is used for a PR on its own branch while work continues in another branch. Feedback from mentors mimics the process in industry, and a review will lead to either changes or merging of the branch.
+This API is the back end project which is intended to work with the front end project to collectively produce a complete and functioning whole. It is designed to allow access to data programmatically as part of the whole, while offering stand alone access via specific endpoints.
+The back end project is built using javascript with express to access a PSQL database. Testing through Jest and Supertest has been used for Test Driven Development throughout, and Github has been used in a style to mimic a real world development work flow; working, tested code for one ticket is used for a PR on its own branch while work continues in another branch. Feedback from mentors mimics the process in industry, and a review will lead to either changes or merging of the branch. The endpoints.json serves as documentation, and a description of available inputs is available in the app on; get/api
 
 The live version is hosted through the render service on this link; https://steves-nc-news-project.onrender.com
 
 # In order to make a local copy of the API.
 
-The minimum requirements are; 
+The project is created using node V21.1.9 and PSQL V12.16; 
 
 1. The first step is to clone the public repo from https://github.com/BigDaddyTarpon/Steve-s-BEend-NC-News-project
 
