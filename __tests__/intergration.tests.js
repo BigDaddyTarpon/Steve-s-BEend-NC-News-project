@@ -57,11 +57,11 @@ describe("GET non existent endpoint", () => {
 });
 
 describe("GET /api/articles", () => {
-  test("GET:200 returns status 200", () => {it 
+  test("GET: 200 returns status 200", () => {
     return request(app).get("/api/articles").expect(200);
   });
 
-  test("GET:200 returns an arrayof all articles including a comment_count but without body property", () => {
+  test("GET: 200 returns an array of all articles including a comment_count but without body property", () => {
     return request(app)
       .get("/api/articles")
       .then((response) => {
@@ -82,7 +82,7 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test("GET:200 if optinal query for topics is present filter artiles by topic, otherwise returnin all articles", () => {
+  test("GET: 200 if optional query for topics is present filter articles by topic, otherwise returning all articles", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)
@@ -91,7 +91,7 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test("GET:200 filtered articles should all have correct topic property to match the filter", () => {
+  test("GET: 200 filtered articles should all have correct topic property to match the filter", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)
@@ -102,7 +102,7 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test("GET:200 should return empty array when filtertopic is valid but does not exist", () => {
+  test("GET: 200 should return empty array when filter topic is valid but does not exist", () => {
     return request(app)
       .get("/api/articles?topic=banana")
       .expect(200)
@@ -181,28 +181,26 @@ describe("GET /api/articles", () => {
   });
 });
 
-describe("GET /api/articles/:article_id", () => {
-  test("GET:200 returns the article with appropriate properties", () => {
+describe.only("GET /api/articles/:article_id", () => {
+  test("GET: 200 returns the article with appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(response.body.articles[0].article_id).toBe(1);
-        expect(response.body.articles[0].votes).toBe(100);
-        expect(response.body.articles[0].author).toBe("butter_bridge");
-        expect(response.body.articles[0].title).toBe(
-          "Living in the shadow of a great man"
-        );
-        expect(response.body.articles[0].body).toBe(
-          "I find this existence challenging"
-        );
-        expect(response.body.articles[0].topic).toBe("mitch");
-        expect(typeof response.body.articles[0].created_at).toBe("string");
-        expect(typeof response.body.articles[0].article_img_url).toBe("string");
+        const testArticle = response.body.articles[0];
+
+        expect(testArticle.article_id).toBe(1);
+        expect(testArticle.votes).toBe(100);
+        expect(testArticle.author).toBe("butter_bridge");
+        expect(testArticle.title).toBe("Living in the shadow of a great man");
+        expect(testArticle.body).toBe("I find this existence challenging");
+        expect(testArticle.topic).toBe("mitch");
+        expect(typeof testArticle.created_at).toBe("string");
+        expect(typeof testArticle.article_img_url).toBe("string");
       });
   });
 
-  test("GET200 should now have comment count property", () => {
+  test("GET: 200 should now have comment count property", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -231,7 +229,7 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 describe("GET /api", () => {
-  test("GET:200 returns object describing all the available endpoints", () => {
+  test("GET: 200 returns object describing all the available endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -243,7 +241,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test("GET:200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
+  test("GET: 200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -263,7 +261,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  test("GET:200 returns comments in correct sort order", () => {
+  test("GET: 200 returns comments in correct sort order", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -274,7 +272,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  test("GET:200 returns a status 200, returns empty, but not an error when id provied no comments", () => {
+  test("GET: 200 returns a status 200, returns empty, but not an error when id provied no comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
@@ -303,7 +301,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 });
 
 describe("GET /api/users", () => {
-  test("GET:200 should return an array of all correct length containing all the users, where each user object has the correct properties", () => {
+  test("GET: 200 should return an array of all correct length containing all the users, where each user object has the correct properties", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
@@ -382,7 +380,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-test("POST:400 should return Bad Request for missing input fields", () => {
+test("POST: 400 should return Bad Request for missing input fields", () => {
   return request(app)
     .post("/api/articles/1/comments")
     .send({})
@@ -393,7 +391,7 @@ test("POST:400 should return Bad Request for missing input fields", () => {
     });
 });
 
-test("POST:404 should return Not Found for invalid author field", () => {
+test("POST: 404 should return Not Found for invalid author field", () => {
   return request(app)
     .post("/api/articles/1/comments")
     .send({
@@ -406,7 +404,7 @@ test("POST:404 should return Not Found for invalid author field", () => {
     });
 });
 
-test("POST:400 should return Bad Request for invalid article id input", () => {
+test("POST: 400 should return Bad Request for invalid article id input", () => {
   return request(app)
     .post("/api/articles/banana/comments")
     .send({
@@ -419,7 +417,7 @@ test("POST:400 should return Bad Request for invalid article id input", () => {
     });
 });
 
-test("POST:404 should return Not Found if valid but not existing article_id", () => {
+test("POST: 404 should return Not Found if valid but not existing article_id", () => {
   return request(app)
     .post("/api/articles/999/comments")
     .send({
@@ -443,7 +441,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 
-  test("DELETE:404 returns error code and message when id is valid but doesnt exist", () => {
+  test("DELETE: 404 returns error code and message when id is valid but doesnt exist", () => {
     return request(app)
       .delete("/api/comments/999")
       .expect(404)
@@ -452,7 +450,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 
-  test("DELETE:400 returns error code and message when id is invalid", () => {
+  test("DELETE: 400 returns error code and message when id is invalid", () => {
     return request(app).delete("/api/comments/banana");
   });
 
@@ -522,7 +520,7 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
-  test("PATCH:200 should return 400 when request body has no inc_votes property", () => {
+  test("PATCH: 200 should return 400 when request body has no inc_votes property", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({})
