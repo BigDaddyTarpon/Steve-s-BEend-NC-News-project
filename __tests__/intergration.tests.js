@@ -99,7 +99,7 @@ describe("/api/articles", () => {
         });
       });
   });
-  test("GET:200 should return empty array when filtertopic is valid but does not exist", () => {
+  test("GET:200 should return empty array when filter topic is valid but does not exist", () => {
     return request(app)
       .get("/api/articles?topic=banana")
       .expect(200)
@@ -429,7 +429,8 @@ describe(" /api/comments/:comment_id", () => {
       .send({ inc_votes: 500 })
       .expect(202)
       .then((response) => {
-        expect(response.body.updatedComment[0]).toEqual({
+        const updatedComment = response.body.updatedComment[0];
+        expect(updatedComment).toEqual({
           comment_id: 1,
           body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
           article_id: 9,
