@@ -8,6 +8,7 @@ const {
   checkCommentExists,
   checkArticleIdExists,
   adjustVotes,
+  adjustCommentVotes,
   selectAllUsers,
   insertArticle,
 } = require("../models/topics.models");
@@ -25,8 +26,11 @@ exports.getTopics = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const topic = req.query.topic;
-  selectArticles(topic)
+  const { topic } = req.query;
+  const sort_by = req.query.sort_by || "created_at";
+  const order = req.query.order || "desc";
+
+  selectArticles(topic, sort_by, order)
     .then((articles) => {
       res.status(200).send({ articles });
     })
@@ -141,6 +145,26 @@ exports.addArticle = (req, res, next) => {
     .then((articles) => {
       
       res.status(201).send({ articles });
+    })
+
+
+exports.incrementVotesByCommentId = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+
+  if (Number(comment_id) === NaN) {
+    throw { status: 400, message: "Bad Request" };
+  }
+
+  checkCommentExists(comment_id)
+    .then(() => {
+      if (!inc_votes) {
+        return Promise.reject({ status: 400, message: "Bad Request" });
+      }
+      return adjustCommentVotes(comment_id, inc_votes);
+    })
+    .then((updatedComment) => {
+      res.status(202).send({ updatedComment });
     })
 
     .catch((err) => {
