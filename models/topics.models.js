@@ -6,7 +6,9 @@ exports.selectTopics = () => {
   });
 };
 
-exports.selectArticles = (topic) => {
+exports.selectArticles = (topic, sort_by, order) => {
+  let queryArray = [];
+
   let queryString = `SELECT 
   articles.article_id, 
   title,
@@ -19,14 +21,36 @@ exports.selectArticles = (topic) => {
   FROM articles
   JOIN comments ON articles.article_id = comments.article_id`;
 
+  if (
+    ![
+      "article_id",
+      "title",
+      "topic",
+      "author",
+      "created_at",
+      "articles.votes",
+      "article_img_url",
+    ].includes(sort_by)
+  ) {
+    return Promise.reject({ status: 400, message: "Bad Request" });
+  }
+  if (!["asc", "desc"].includes(order)) {
+    return Promise.reject({ status: 400, message: "Bad Request" });
+  }
+
   if (topic) {
-    queryString += ` WHERE articles.topic = $1 GROUP BY articles.article_id ORDER BY created_at DESC;`;
-    return db.query(queryString, [topic]).then((articles) => {
+    queryString += ` WHERE articles.topic = $1`;
+    queryArray.push(topic);
+  }
+
+  queryString += ` GROUP BY articles.article_id
+   ORDER BY ${sort_by} ${order};`;
+
+  if (topic) {
+    return db.query(queryString, queryArray).then((articles) => {
       return articles.rows;
     });
   } else {
-    queryString += ` GROUP BY articles.article_id ORDER BY created_at DESC;`;
-
     return db.query(queryString).then((articles) => {
       return articles.rows;
     });
@@ -47,14 +71,17 @@ exports.selectArticlesById = (article_id) => {
     articles.body,
     COUNT(comments.comment_id) AS comment_count
     FROM articles
-    JOIN comments 
+    LEFT JOIN comments 
     ON articles.article_id = comments.article_id 
     WHERE articles.article_id = $1 GROUP BY articles.article_id;`,
       [article_id]
     )
+
     .then(({ rows }) => {
+      
       return rows;
-    });
+    })
+
 };
 
 exports.selectCommentsById = (article_id) => {
@@ -141,6 +168,7 @@ exports.selectAllUsers = () => {
   });
 };
 
+
 exports.selectUserByUsername = (username) => {
   return db
     .query("SELECT * FROM users where users.username = $1;", [username])
@@ -151,3 +179,34 @@ exports.selectUserByUsername = (username) => {
       return rows;
     });
 };
+
+
+exports.insertArticle = (author, title, body, topic, article_img_url)=>{
+  return db
+  .query(
+    `INSERT INTO articles(author, title, body, topic, article_img_url) 
+    VALUES ($1, $2, $3, $4, $5) 
+    RETURNING *
+    ;`,
+    [author, title, body, topic, article_img_url]
+
+    
+  )
+  .then(({ rows }) => {
+    return rows;
+  })
+}
+
+
+exports.adjustCommentVotes = (comment_id, inc_votes) => {
+  return db
+    .query(
+      `UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`,
+      [inc_votes, comment_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
+
