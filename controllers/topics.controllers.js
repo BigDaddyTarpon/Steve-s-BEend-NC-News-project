@@ -134,7 +134,6 @@ exports.addArticle = (req, res, next) => {
   if (!article_img_url) {
     article_img_url = "https://northcoders.com/";
   }
-  
 
   insertArticle(author, title, body, topic, article_img_url)
     .then((insertedArticle) => {
@@ -146,7 +145,10 @@ exports.addArticle = (req, res, next) => {
       
       res.status(201).send({ articles });
     })
-
+    .catch((err) => {
+      next(err);
+    });
+  }
 
 exports.incrementVotesByCommentId = (req, res, next) => {
   const { comment_id } = req.params;

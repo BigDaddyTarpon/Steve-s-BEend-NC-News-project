@@ -91,8 +91,6 @@ describe("GET /api/articles", () => {
       });
   });
 
-
-
   test("GET: 200 filtered articles should all have correct topic property to match the filter", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
@@ -113,7 +111,7 @@ describe("GET /api/articles", () => {
         expect(response.body.articles.length).toBe(0);
       });
   });
-});
+
 
   test("GET: 200 returns articles sorted by date in DESC order", () => {
     return request(app)
@@ -125,7 +123,6 @@ describe("GET /api/articles", () => {
      
     });
 });
-
 
   test("GET: 200 has optional sort_by query which returns articles sorted by query", () => {
     return request(app)
@@ -184,7 +181,8 @@ describe("GET /api/articles", () => {
         expect(response.body.message).toBe("Bad Request");
       });
   });
-});
+})
+
 
 describe("GET /api/articles/:article_id", () => {
   test("GET: 200 returns the article with appropriate properties", () => {
@@ -289,6 +287,7 @@ describe("POST /api/articles", () => {
         expect(response.body.message).toBe("Not Found");
       });
   });
+
   test("POST 404 returns error message when the author field is not a permitted value", () => {
     return request(app)
       .post("/api/articles")
@@ -303,6 +302,9 @@ describe("POST /api/articles", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.message).toBe("Not Found");
+      })
+    })
+  })
 
 describe("GET /api", () => {
   test("GET: 200 returns object describing all the available endpoints", () => {
@@ -318,9 +320,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
-
   test("GET: 200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
-
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -457,7 +457,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
-});
+
 
 test("POST: 400 should return Bad Request for missing input fields", () => {
   return request(app)
@@ -508,6 +508,7 @@ test("POST: 404 should return Not Found if valid but not existing article_id", (
       expect(response.body.message).toBe("Not Found");
     });
 });
+});
 
 describe("DELETE /api/comments/:comment_id", () => {
   test("DELETE: 204 removes a comment by the comment_id", () => {
@@ -531,51 +532,6 @@ describe("DELETE /api/comments/:comment_id", () => {
 
   test("DELETE: 400 returns error code and message when id is invalid", () => {
     return request(app).delete("/api/comments/banana");
-  });
-
-describe("/api/articles/:article_id", () => {
-  test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: 5555 })
-      .expect(202)
-      .then((response) => {
-        expect(response.body.updatedArticle[0].votes).toBe(5655);
-        expect(response.body.updatedArticle[0].article_id).toBe(1);
-        expect(response.body.updatedArticle[0].author).toBe("butter_bridge");
-        expect(response.body.updatedArticle[0].title).toBe(
-          "Living in the shadow of a great man"
-        );
-        expect(response.body.updatedArticle[0].body).toBe(
-          "I find this existence challenging"
-        );
-        expect(response.body.updatedArticle[0].topic).toBe("mitch");
-        expect(typeof response.body.updatedArticle[0].created_at).toBe(
-          "string"
-        );
-        expect(typeof response.body.updatedArticle[0].article_img_url).toBe(
-          "string"
-        );
-      });
-  });
-  test("should not change any properties of any other articles", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: 5555 })
-      .expect(202)
-      .then((response) => {
-        expect(response.body.updatedArticle.length).toBe(1);
-      });
-  });
-  test("should return 400 when given an invalid article_id", () => {
-    return request(app)
-      .patch("/api/articles/banana")
-      .send({ inc_votes: 5555 })
-
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
   });
 
   test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
@@ -635,8 +591,29 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
+  test("PATCH: 404 should return 404 when given a valid but nonexistent article_id", () => {
+    return request(app)
+      .patch("/api/articles/9999")
+      .send({ inc_votes: 5555 })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
 
-describe(" /api/comments/:comment_id", () => {
+  test("PATCH: 200 should return 400 when request body has no inc_votes property", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({})
+
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+});
+
+describe("PATCH /api/comments/:comment_id", () => {
   test("PATCH: 202 updates the votes on a comment by the comment_id then returns the updated comment with no other properties changed", () => {
     return request(app)
       .patch("/api/comments/1")
@@ -703,25 +680,3 @@ describe(" /api/comments/:comment_id", () => {
 });
 
 
-  test("PATCH: 404 should return 404 when given a valid but nonexistent article_id", () => {
-
-    return request(app)
-      .patch("/api/articles/9999")
-      .send({ inc_votes: 5555 })
-      .expect(404)
-      .then((response) => {
-        expect(response.body.message).toBe("Not Found");
-      });
-  });
-
-  test("PATCH: 200 should return 400 when request body has no inc_votes property", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({})
-
-      .expect(400)
-      .then((response) => {
-        expect(response.body.message).toBe("Bad Request");
-      });
-  });
-});
