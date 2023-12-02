@@ -193,7 +193,7 @@ describe("GET /api/users/:username", () => {
       });
   });
 
-  test("GET: 404 returns an error message when the username is invalid", () => {
+  test("GET: 404 returns an error message but does not accept SQL injection when the username is an invalid attempt to inject SQL code", () => {
     return request(app)
       .get("/api/users/`DELETE * FROM users where user.username=lurker`")
       .expect(404)
