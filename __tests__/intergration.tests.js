@@ -82,9 +82,7 @@ describe("GET /api/articles", () => {
       });
   });
 
-
   test("GET: 200 if optional query for topics is present filter articles by topic, otherwise returning all articles", () => {
-
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)
@@ -92,6 +90,7 @@ describe("GET /api/articles", () => {
         expect(response.body.articles.length).toBe(4);
       });
   });
+
 
 
   test("GET: 200 filtered articles should all have correct topic property to match the filter", () => {
@@ -105,19 +104,20 @@ describe("GET /api/articles", () => {
       });
   });
 
-
   test("GET: 200 should return empty array when filter topic is valid but does not exist", () => {
-
     return request(app)
       .get("/api/articles?topic=banana")
       .expect(200)
       .then((response) => {
-        expect(response.body.articles.leng
+
+        expect(response.body.articles.length).toBe(0);
+      });
+  });
+});
 
   test("GET: 200 returns articles sorted by date in DESC order", () => {
     return request(app)
       .get("/api/articles")
-
       .then((response) => {
         expect(response.body.articles).toBeSortedBy("created_at", {
           descending: true,
@@ -186,7 +186,7 @@ describe("GET /api/articles", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("GET: 200 returns the article with appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")
@@ -233,6 +233,77 @@ describe.only("GET /api/articles/:article_id", () => {
   });
 });
 
+
+describe("POST /api/articles", () => {
+  test("Post: 201 accepts an object with specific article properties, returns the complete posted article", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "butter_bridge",
+        title: "mitch got a new cat",
+        body: "he caught a big one",
+        topic: "cats",
+        article_img_url:
+          "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+      })
+      .expect(201)
+      .then((response) => {
+        expect(response.body.articles[0]).toMatchObject({
+          article_id: 14,
+          title: "mitch got a new cat",
+          topic: "cats",
+          author: "butter_bridge",
+          created_at: expect.any(String),
+          votes: 0,
+          article_img_url:
+            "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+          body: "he caught a big one",
+          comment_count: "0",
+        });
+      });
+  });
+
+  test("POST 400 returns error message when any of the fields are missing", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({})
+      .expect(400)
+      .then((response) => {
+        expect(response.body.message).toBe("Bad Request");
+      });
+  });
+
+  test("POST 404 returns error message when the topic field is not a permitted value", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "butter_bridge",
+        title: "mitch got a new cat",
+        body: "he caught a big one",
+        topic: "fishing",
+        article_img_url:
+          "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+      });
+  });
+  test("POST 404 returns error message when the author field is not a permitted value", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "sneaky",
+        title: "mitch got a new cat",
+        body: "he caught a big one",
+        topic: "cats",
+        article_img_url:
+          "https://www.shutterstock.com/image-photo/big-fish-trophy-arctic-char-charr-2091386731",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toBe("Not Found");
+
 describe("GET /api", () => {
   test("GET: 200 returns object describing all the available endpoints", () => {
     return request(app)
@@ -241,12 +312,15 @@ describe("GET /api", () => {
       .then((response) => {
         expect(response.body.length).not.toBe(0);
         expect(response.body.endPoints).toEqual(endPoints);
+
       });
   });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
+
   test("GET: 200 returns a status 200, returns the correct number of comments each of the correct shape", () => {
+
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -459,7 +533,6 @@ describe("DELETE /api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/banana");
   });
 
-
 describe("/api/articles/:article_id", () => {
   test("PATCH: 202 updates the votes on an article by the article_id then returns the updated article with no other properties changed", () => {
     return request(app)
@@ -504,7 +577,6 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.message).toBe("Bad Request");
       });
   });
-
 
   test("DELETE: 400 returns an error message if provided with additional input after a vaid comment_id", () => {
     return request(app)

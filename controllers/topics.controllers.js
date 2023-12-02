@@ -10,6 +10,7 @@ const {
   adjustVotes,
   adjustCommentVotes,
   selectAllUsers,
+  insertArticle,
 } = require("../models/topics.models");
 
 const appDetails = require("../endpoints.json");
@@ -128,6 +129,25 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
+exports.addArticle = (req, res, next) => {
+  let { author, title, body, topic, article_img_url } = req.body;
+  if (!article_img_url) {
+    article_img_url = "https://northcoders.com/";
+  }
+  
+
+  insertArticle(author, title, body, topic, article_img_url)
+    .then((insertedArticle) => {
+      const { article_id } = insertedArticle[0];
+
+      return selectArticlesById(article_id);
+    })
+    .then((articles) => {
+      
+      res.status(201).send({ articles });
+    })
+
+
 exports.incrementVotesByCommentId = (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
@@ -146,7 +166,9 @@ exports.incrementVotesByCommentId = (req, res, next) => {
     .then((updatedComment) => {
       res.status(202).send({ updatedComment });
     })
+
     .catch((err) => {
       next(err);
     });
 };
+

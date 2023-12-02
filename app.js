@@ -11,6 +11,7 @@ const {
   incrementVotesByArticleId,
   incrementVotesByCommentId,
   getAllUsers,
+  addArticle,
 } = require("./controllers/topics.controllers");
 const {
   handle404,
@@ -30,7 +31,7 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.get("/api/users", getAllUsers);
 
 app.post("/api/articles/:article_id/comments", addCommentbyArticleID);
-
+app.post("/api/articles", addArticle)
 app.patch("/api/articles/:article_id", incrementVotesByArticleId);
 app.patch("/api/comments/:comment_id", incrementVotesByCommentId);
 

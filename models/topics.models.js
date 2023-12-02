@@ -71,14 +71,17 @@ exports.selectArticlesById = (article_id) => {
     articles.body,
     COUNT(comments.comment_id) AS comment_count
     FROM articles
-    JOIN comments 
+    LEFT JOIN comments 
     ON articles.article_id = comments.article_id 
     WHERE articles.article_id = $1 GROUP BY articles.article_id;`,
       [article_id]
     )
+
     .then(({ rows }) => {
+      
       return rows;
-    });
+    })
+
 };
 
 exports.selectCommentsById = (article_id) => {
@@ -168,6 +171,24 @@ exports.selectAllUsers = () => {
   });
 };
 
+
+exports.insertArticle = (author, title, body, topic, article_img_url)=>{
+  return db
+  .query(
+    `INSERT INTO articles(author, title, body, topic, article_img_url) 
+    VALUES ($1, $2, $3, $4, $5) 
+    RETURNING *
+    ;`,
+    [author, title, body, topic, article_img_url]
+
+    
+  )
+  .then(({ rows }) => {
+    return rows;
+  })
+}
+
+
 exports.adjustCommentVotes = (comment_id, inc_votes) => {
   return db
     .query(
@@ -178,3 +199,4 @@ exports.adjustCommentVotes = (comment_id, inc_votes) => {
       return rows;
     });
 };
+
