@@ -159,9 +159,6 @@ exports.adjustVotes = (article_id, inc_votes) => {
     )
     .then(({ rows }) => {
       return rows;
-    })
-    .catch((err) => {
-      next(err);
     });
 };
 
@@ -169,6 +166,18 @@ exports.selectAllUsers = () => {
   return db.query("SELECT * FROM users;").then(({ rows }) => {
     return rows;
   });
+};
+
+
+exports.selectUserByUsername = (username) => {
+  return db
+    .query("SELECT * FROM users where users.username = $1;", [username])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, message: "Not Found" });
+      }
+      return rows;
+    });
 };
 
 
@@ -199,4 +208,5 @@ exports.adjustCommentVotes = (comment_id, inc_votes) => {
       return rows;
     });
 };
+
 

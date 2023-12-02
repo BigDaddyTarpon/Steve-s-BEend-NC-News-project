@@ -10,6 +10,7 @@ const {
   adjustVotes,
   adjustCommentVotes,
   selectAllUsers,
+  selectUserByUsername
   insertArticle,
 } = require("../models/topics.models");
 
@@ -129,6 +130,13 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
+exports.getUserName = (req, res, next) => {
+  const { username } = req.params;
+
+  selectUserByUsername(username)
+    .then((user) => {
+      res.status(200).send({ user });
+
 exports.addArticle = (req, res, next) => {
   let { author, title, body, topic, article_img_url } = req.body;
   if (!article_img_url) {
@@ -144,10 +152,14 @@ exports.addArticle = (req, res, next) => {
     .then((articles) => {
       
       res.status(201).send({ articles });
+
     })
     .catch((err) => {
       next(err);
     });
+
+};
+
   }
 
 exports.incrementVotesByCommentId = (req, res, next) => {
@@ -173,4 +185,5 @@ exports.incrementVotesByCommentId = (req, res, next) => {
       next(err);
     });
 };
+
 
