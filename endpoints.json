@@ -15,11 +15,13 @@
     "exampleResponse": {
       "articles": [
         {
+          "article_id": 23,
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
           "author": "weegembump",
           "created_at": "2018-05-30T15:59:13.341Z",
           "votes": 0,
+          "article_img_url": "https://images.pexels.com/photos/2403392/pexels-photo-2403392.jpeg?w=700&h=700",
           "comment_count": 6
         }
       ]
@@ -58,6 +60,17 @@
       ]
     }
   },
+  "POST /api/articles/:article_id/comments": {
+    "description" : "add a comment onto a given atricle",
+    "accepts" : "an object with username and body",
+    "example response" : "returns the posted comment"
+  },
+
+  "PATCH /api/articles/:article_id" : {
+    "description" : "updates an article by article_id to aincrement votes",
+    "accepts" : "an object with an inc_votes:newVote property where newVote is how much the votes should increase",
+    "example response" : "responds with thte updated article"
+  }
 
   "DELETE /api/comments/:comment_id": {
     "description": "deletes a single comments by the comment_id",
@@ -66,7 +79,7 @@
   },
 
   "GET /api/users": {
-    "description": "serves all comments on an article by the article_id",
+    "description": "serves an array of all users",
     "queries": [],
     "exampleResponse": [
       {
@@ -106,5 +119,21 @@
       "body": "he caught a big one",
       "comment_count": "0"
     }
+  },
+
+  "GET /api/users/:username": {
+    "description" : "returns a user by username",
+    "example response": {
+      "username": "butter_bridge",
+      "name": "jonny",
+      "avatar_url":
+        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+    } 
+  },
+
+  "PATCH /api/comments/:comment_id" :{
+    "description" : "update the votes on a comment given the comment's comment_id", 
+    "accepts" : "an object in the form { inc_votes: newVote }",
+    "example response": "responds with the updaed comment"
   }
 }
