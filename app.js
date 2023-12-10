@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require('cors');
 const {
   getTopics,
   getArticles,
@@ -25,7 +25,7 @@ const {
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticlesById);

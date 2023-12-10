@@ -70,10 +70,10 @@
     "description" : "updates an article by article_id to aincrement votes",
     "accepts" : "an object with an inc_votes:newVote property where newVote is how much the votes should increase",
     "example response" : "responds with thte updated article"
-  }
+  },
 
-  "DELETE /api/comments/:comment_id": {
-    "description": "deletes a single comments by the comment_id",
+  "DELETE /api/comments/:comment_id" : {
+    "description": "deletes a single comment by the comment_id",
     "queries": [],
     "exampleResponse": {}
   },
