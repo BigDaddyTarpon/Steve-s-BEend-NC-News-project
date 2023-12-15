@@ -16,6 +16,7 @@ exports.selectArticles = (topic, sort_by, order) => {
   articles.author,
   articles.created_at,
   articles.votes,
+  comment_count,
   article_img_url, 
   COUNT(comments.comment_id) AS comment_count
   FROM articles
