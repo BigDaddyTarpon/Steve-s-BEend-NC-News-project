@@ -16,7 +16,6 @@ exports.selectArticles = (topic, sort_by, order) => {
   articles.author,
   articles.created_at,
   articles.votes,
-  comment_count,
   article_img_url, 
   COUNT(comments.comment_id)::INTEGER AS comment_count
   FROM articles
@@ -29,6 +28,7 @@ exports.selectArticles = (topic, sort_by, order) => {
       "topic",
       "author",
       "created_at",
+      "comment_count",
       "articles.votes",
       "article_img_url",
     ].includes(sort_by)
